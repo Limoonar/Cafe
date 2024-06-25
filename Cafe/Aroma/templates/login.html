@@ -15,11 +15,7 @@
 
     <form method="post" action="{% url 'login' %}">
         {% csrf_token %}
-        <label for="username_or_email">Username or Email:</label><br>
-        <input type="text" id="username_or_email" name="username_or_email" required><br><br>
-
-        <label for="password">Password:</label><br>
-        <input type="password" id="password" name="password" required><br><br>
+        {{ form.as_p }}
 
         <input type="submit" value="Login">
     </form>
