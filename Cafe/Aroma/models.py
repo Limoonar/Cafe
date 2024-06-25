@@ -9,7 +9,7 @@ class Admins(models.Model):
 
 
 class Storage(models.Model):
-    ID = models.AutoField(unique=True, primary_key=True)
+    id = models.AutoField(unique=True, primary_key=True)
     Name = models.CharField(max_length=255, blank= False, unique=True)
     Amount = models.CharField(max_length=255, blank= False)
 
@@ -19,7 +19,7 @@ class Users(models.Model):
     Email = models.CharField(max_length=255, blank= False, unique=True)
     Phone_Number = models.IntegerField(max_length=11)
 class Product(models.Model):
-    ID = models.AutoField(unique=True, primary_key=True)
+    id = models.AutoField(unique=True, primary_key=True)
     Name = models.CharField(unique=True, max_length=255)
     Sugar = models.IntegerField(max_length=10)
     Coffee = models.IntegerField(max_length=10)

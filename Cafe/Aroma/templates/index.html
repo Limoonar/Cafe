@@ -1,0 +1,50 @@
+<!-- templates/index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Coffee Shop</title>
+    <!-- Add your CSS and JS links here -->
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <!-- Menu Icon for Sidebar -->
+        <button onclick="openSidebar()">☰ Menu</button>
+        <!-- Other Navbar Items -->
+        <a href="#">Purchase History</a>
+        <a href="#">Shopping Cart</a>
+        <a href="{% url 'login' %}">Login/Logout</a>
+    </div>
+
+    <!-- Sidebar (for Categories) -->
+    <div id="sidebar" class="sidebar">
+        <a href="#">Shakes</a>
+        <a href="#">Cakes</a>
+        <a href="#">Cookies</a>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main">
+        <!-- Slider -->
+        <div class="slider">
+            <!-- Slider Images -->
+            <!-- Implement your slider here -->
+        </div>
+
+        <!-- Bestselling Products -->
+        <div class="bestselling-products">
+            <h2>Top 12 Bestselling Products</h2>
+            <ul>
+            {% for product in products %}
+                <li>{{ product.name }} - {{ product.price }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- Add your JavaScript for functionality like slider here -->
+
+</body>
+</html>
