@@ -28,7 +28,7 @@ class Product(models.Model):
     Price = models.IntegerField(max_length=10)
     Vertical = models.BinaryField()
 
-class Orders(models.model):
+class Orders(models.Model):
     OrderID = models.AutoField(unique=True, primary_key=True)
     Username = models.ManyToManyField(Users, related_name='Orders')
     Products = models.ManyToManyField(Product, related_name= 'Orders')
