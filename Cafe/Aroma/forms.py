@@ -1,5 +1,5 @@
 from django import forms
-from .models import Users
+from .models import Users, Product
 from django.contrib.auth.hashers import make_password
 
 
@@ -39,3 +39,8 @@ class RegistrationForm(forms.ModelForm):
 
 class OTPForm(forms.Form):
     otp = forms.CharField(max_length=4, widget=forms.TextInput(attrs={'placeholder': 'Enter OTP'}))
+
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ['Name', 'Sugar', 'Coffee', 'Flour', 'Chocolate', 'Price', 'Vertical']

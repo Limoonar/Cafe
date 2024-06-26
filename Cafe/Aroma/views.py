@@ -1,13 +1,15 @@
 from django.shortcuts import render, redirect
 from .models import Product
 from django.contrib.auth import authenticate, login
-from .forms import LoginForm, RegistrationForm, OTPForm
+from .forms import LoginForm, RegistrationForm, OTPForm, ProductForm
 from .models import Users
 from django.contrib.auth.hashers import check_password
-import ghasedakpack
-from numpy.random import randint
+#import ghasedakpack
+#from numpy.random import randint
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
 
-sms = ghasedakpack.Ghasedak("a26658f51d8f300e354cf8d137bca49aab329de737a80c80f507fb883b2ffeba")
+#sms = ghasedakpack.Ghasedak("a26658f51d8f300e354cf8d137bca49aab329de737a80c80f507fb883b2ffeba")
 
 
 
@@ -23,6 +25,11 @@ def login_view(request):
             username_or_email = form.cleaned_data['username_or_email']
             password = form.cleaned_data['Password']
 
+            # Admin check
+            if username_or_email == "admin" and password == "admin":
+                request.session['username'] = "admin"
+                return redirect('adminpage')  # Redirect to admin page
+
             # Check if the username or email exists in the Users model
             try:
                 user = Users.objects.get(Username=username_or_email)
@@ -37,17 +44,17 @@ def login_view(request):
                 # Manually compare hashed password
                 if password == user.Password:
                     global phone, random_code
-                    random_code= randint(1000,9999)
-                    phone= '0'+str(user.Phone_Number)
+                    #random_code = randint(1000, 9999)
+                    phone = '0' + str(user.Phone_Number)
                     message = str(random_code)
-                    receptor = "09143658166"
+                    receptor = phone
                     linenumber = "10008566"
-                    sms = ghasedakpack.Ghasedak("7cfab86d60b9fc7621f8a572dbec81d2628cfc6a387a05d724bc406d7848251f")
+                    '''sms = ghasedakpack.Ghasedak("7cfab86d60b9fc7621f8a572dbec81d2628cfc6a387a05d724bc406d7848251f")
                     sms.send({
                         'message': message,
                         'receptor': receptor,
                         'linenumber': linenumber
-                    })
+                    })'''
 
                     # Store necessary data in session
                     request.session['temp_username'] = user.Username
@@ -103,3 +110,31 @@ def otp_verify_view(request):
         error = None
 
     return render(request, 'otp_verify.html', {'form': form, 'error': error})
+
+
+@login_required
+def adminpage_view(request):
+    if request.session.get('username') != 'admin':
+        return HttpResponseForbidden("You are not allowed to access this page.")
+    return render(request, 'adminpage.html')
+
+
+def add_products_view(request):
+    if request.session.get('username') != 'admin':
+        return HttpResponseForbidden("You are not allowed to access this page.")
+
+    if request.method == 'POST':
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('add_products')  # Redirect back to the form after successful submission
+    else:
+        form = ProductForm()
+
+    return render(request, 'add_products.html', {'form': form})
+
+@login_required
+def inventory_management_view(request):
+    if request.session.get('username') != 'admin':
+        return HttpResponseForbidden("You are not allowed to access this page.")
+    return render(request, 'inventory_management.html')
