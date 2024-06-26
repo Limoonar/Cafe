@@ -4,7 +4,7 @@ from django.db import models
 
 class Admins(models.Model):
     Username = models.CharField(max_length=255, blank= False, unique=True, primary_key=True)
-    Email = models.CharField(max_length=255, blank= False, unique=True)
+    Email = models.EmailField(max_length=255, blank= False, unique=True)
     Password = models.CharField(max_length=255, blank= False, unique=True)
 
 
@@ -16,7 +16,8 @@ class Storage(models.Model):
 class Users(models.Model):
     Username = models.CharField(max_length=255, blank= False, unique=True, primary_key=True)
     Full_name = models.CharField(max_length=255, blank= False)
-    Email = models.CharField(max_length=255, blank= False, unique=True)
+    Email = models.EmailField(max_length=255, blank= False, unique=True)
+    Password = models.CharField(max_length=255, blank=False, unique=True, default= 000000)
     Phone_Number = models.IntegerField(max_length=11)
 class Product(models.Model):
     id = models.AutoField(unique=True, primary_key=True)
