@@ -36,3 +36,6 @@ class RegistrationForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+
+class OTPForm(forms.Form):
+    otp = forms.CharField(max_length=4, widget=forms.TextInput(attrs={'placeholder': 'Enter OTP'}))

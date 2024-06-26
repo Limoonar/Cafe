@@ -15,7 +15,11 @@
         <!-- Other Navbar Items -->
         <a href="#">Purchase History</a>
         <a href="#">Shopping Cart</a>
-        <a href="{% url 'login' %}">Login/Logout</a>
+        {% if request.session.username %}
+            <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+        {% endif %}
     </div>
 
     <!-- Sidebar (for Categories) -->
