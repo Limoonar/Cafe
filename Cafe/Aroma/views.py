@@ -4,8 +4,12 @@ from django.contrib.auth import authenticate, login
 from .forms import LoginForm
 
 def index(request):
-    # Your main page logic here
-    return render(request, 'index.html')
+    best_selling_products = Product.objects.order_by('-sales')[:12]  # Fetch top 12 best-selling products
+    context = {
+        'best_selling_products': best_selling_products,
+    }
+    return render(request, 'index.html', context)
+
 
 def login_view(request):
     if request.method == 'POST':
@@ -28,3 +32,10 @@ def login_view(request):
         error = None
 
     return render(request, 'login.html', {'form': form, 'error': error})
+
+def home(request):
+    best_selling_products = Product.objects.order_by('-sales')[:12]  # Fetch top 12 best-selling products
+    context = {
+        'best_selling_products': best_selling_products,
+    }
+    return render(request, 'home.html', context)
