@@ -1,5 +1,5 @@
 from django import forms
-from .models import Users, Product
+from .models import *
 from django.contrib.auth.hashers import make_password
 
 
@@ -44,3 +44,8 @@ class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = ['Name', 'Sugar', 'Coffee', 'Flour', 'Chocolate', 'Price', 'Vertical']
+
+class UpdateInventoryForm(forms.ModelForm):
+    class Meta:
+        model = Storage
+        fields = ['id','date','sugar', 'flour', 'coffee', 'chocolate']

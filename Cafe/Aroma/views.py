@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
-from .models import Product
+from .models import *
 from django.contrib.auth import authenticate, login
-from .forms import LoginForm, RegistrationForm, OTPForm, ProductForm
+from .forms import LoginForm, RegistrationForm, OTPForm, ProductForm, UpdateInventoryForm
 from .models import Users
 from django.contrib.auth.hashers import check_password
 import ghasedakpack
@@ -49,12 +49,8 @@ def login_view(request):
                     message = str(random_code)
                     receptor = phone
                     linenumber = "10008566"
-                    sms = ghasedakpack.Ghasedak("7cfab86d60b9fc7621f8a572dbec81d2628cfc6a387a05d724bc406d7848251f")
-                    sms.send({
-                        'message': message,
-                        'receptor': receptor,
-                        'linenumber': linenumber
-                    })
+                    #sms = ghasedakpack.Ghasedak("7cfab86d60b9fc7621f8a572dbec81d2628cfc6a387a05d724bc406d7848251f")
+                    #sms.send({'message': message,'receptor': receptor,'linenumber': linenumber})
 
                     # Store necessary data in session
                     request.session['temp_username'] = user.Username
@@ -122,7 +118,7 @@ def adminpage_view(request):
 def add_products_view(request):
     if request.session.get('username') != 'admin':
         return HttpResponseForbidden("You are not allowed to access this page.")
-
+ 
     if request.method == 'POST':
         form = ProductForm(request.POST)
         if form.is_valid():
@@ -137,4 +133,21 @@ def add_products_view(request):
 def inventory_management_view(request):
     if request.session.get('username') != 'admin':
         return HttpResponseForbidden("You are not allowed to access this page.")
-    return render(request, 'inventory_management.html')
+    if request.method == 'POST':
+        return redirect ('inventory_update')
+    if request.method == 'GET':
+        storage = Storage.objects.order_by('-id').first()
+        return render(request, 'inventory_management.html', {'storage': storage})
+
+
+def inventory_update_view(request):   
+    if request.method == 'POST':
+        #storage = request.POST
+        form = UpdateInventoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('inventory_management')
+    else:
+        form = UpdateInventoryForm()
+    return render(request, 'update_inventory.html', {'form': form})
+

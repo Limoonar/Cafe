@@ -9,5 +9,12 @@
 <body>
     <h1>Inventory Management</h1>
     <!-- Add your inventory management content here -->
+    <p>Sugar: {{ storage.sugar }}</p>
+    <p>Flour: {{ storage.flour }}</p>
+    <p>Coffee: {{ storage.coffee }}</p>
+    <p>Chocolate: {{ storage.chocolate }}</p>
+    <a href="{% url 'inventory_update' %}">
+        <button type="submit" formmethod="POST" >Update Inventory</button>
+    </a>
 </body>
 </html>
