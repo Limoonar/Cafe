@@ -1,25 +1,93 @@
-<!-- templates/login.html -->
-
+<!-- login.html -->
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+
+    <!-- Add Bootstrap CSS for better styling -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">   
+    <!-- Add Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            background: url('{% static "images/Login_Background.jpg" %}') no-repeat center center fixed;
+            background-size: cover;
+            position: relative; /* Ensure body is relatively positioned for absolute positioning */
+            min-height: 100vh; /* Ensure body fills the viewport */
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent white background for the form */
+            border-radius: 10px;
+        }
+        .card-header {
+            text-align: center;
+            font-weight: bold
+        }
+
+        /* Center the login button */
+        .center-login-btn {
+            text-align: center;
+        }
+
+        /* Styling for the footer */
+        .footer {
+            position: absolute;
+            bottom: 50px; /* Adjust as needed */
+            width: 100%;
+            text-align: center;
+            color: #582f0e; /* Text color */
+            font-size: 36px; /* Larger font size */
+            font-weight: bold; /* Bold text */
+        }
+    </style>    
 </head>
 <body>
-    <h2>Login to Your Account</h2>
 
-    {% if error %}
-        <p>{{ error }}</p>
-    {% endif %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">ورود به حساب کاربری</div>
+                    <div class="card-body">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="username">Username or Email</label>
+                                <input type="text" id="username" name="username" class="form-control" required autofocus>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" id="password" name="password" class="form-control" required>
+                            </div>
+                            <!-- Center the login button -->
+                            <div class="center-login-btn">
+                                <button type="submit" class="btn btn-primary">Login</button>
+                            </div>
+                        </form>
+                        <div class="mt-3">
+                            <p>Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <form method="post" action="{% url 'login' %}">
-        {% csrf_token %}
-        {{ form.as_p }}
+    <!-- Footer -->
+    <div class="footer">
+        <p>Aroma Cafe</p>
+    </div>
 
-        <input type="submit" value="Login">
-    </form>
+    <!-- Add your JS links here -->
 
-    <p>Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
+    <!-- Add jQuery and Bootstrap JS for better functionality -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </body>
 </html>
