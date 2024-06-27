@@ -4,11 +4,7 @@ from django.contrib.auth import authenticate, login
 from .forms import LoginForm
 
 def index(request):
-    best_selling_products = Product.objects.order_by('-sales')[:12]  # Fetch top 12 best-selling products
-    context = {
-        'best_selling_products': best_selling_products,
-    }
-    return render(request, 'index.html', context)
+    pass
 
 
 def login_view(request):
