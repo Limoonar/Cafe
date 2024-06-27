@@ -29,7 +29,6 @@
         .center-login-btn {
             display: flex;
             justify-content: center;
-            font-weight: bold;
         }
 
         /* Styling for the footer */
@@ -47,7 +46,11 @@
             font-size: 24px; /* Larger font size */
             font-weight: bold;            
         }
-
+        .center-login-btn {
+            text-align: center;
+            font-size: 24px; /* Larger font size */
+            font-weight: bold;            
+        }
     </style>   
 </head>
 <body>
@@ -70,7 +73,9 @@
                                 <input type="password" id="password" name="password" class="form-control" required>
                             </div>
                             <div class="center-login-btn">
-                                <button type="submit" class="btn btn-primary">Login</button>
+                                <a href="{% url 'login' %}">
+                                <button type="submit" class="btn btn-primary" formmethod="POST">Login</button>
+                                </a>
                             </div>
                         </form>
 
@@ -109,46 +114,41 @@
 
     <!-- Add your JS links here -->
 
-<!-- Add jQuery and Bootstrap JS for better functionality -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script>
-    // Example script to handle OTP form submission
-    $(document).ready(function() {
-        $('#otpForm').on('submit', function(event) {
-            event.preventDefault();
-            var mobileNumber = $('#mobileNumber').val();
-            var otp = $('#otp').val();
-            // You may add additional validation here
+    <!-- Add jQuery and Bootstrap JS for better functionality -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Example script to handle OTP form submission
+        $(document).ready(function() {
+            $('#otpForm').on('submit', function(event) {
+                event.preventDefault();
+                var mobileNumber = $('#mobileNumber').val();
+                var otp = $('#otp').val();
+                // You may add additional validation here
 
-            // AJAX request to Django view to verify OTP
-            $.ajax({
-                type: 'POST',
-                url: '{% url "otp_verify" %}',
-                data: {
-                    'mobileNumber': mobileNumber,
-                    'otp': otp,
-                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
-                },
-                success: function(response) {
-                    if (response.status === 'success') {
+                // AJAX request to Django view to verify OTP
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "otp_verify" %}',
+                    data: {
+                        'mobileNumber': mobileNumber,
+                        'otp': otp,
+                        'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                    },
+                    success: function(response) {
                         // Handle successful login response
+                        // For example, redirect to main page
                         window.location.href = '{% url "index" %}';
-                    } else {
+                    },
+                    error: function(xhr, errmsg, err) {
                         // Handle error response
-                        alert(response.message);
+                        console.log(xhr.status + ": " + xhr.responseText); // Log error for debugging
+                        alert("Failed to login with OTP. Please check your mobile number and OTP.");
                     }
-                },
-                error: function(xhr, errmsg, err) {
-                    // Handle error response
-                    console.log(xhr.status + ": " + xhr.responseText); // Log error for debugging
-                    alert("Failed to login with OTP. Please check your mobile number and OTP.");
-                }
+                });
             });
         });
-    });
-</script>
-
+    </script>
 </body>
 </html>
