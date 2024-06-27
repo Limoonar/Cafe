@@ -4,12 +4,12 @@ from django.contrib.auth import authenticate, login
 from .forms import LoginForm, RegistrationForm, OTPForm, ProductForm
 from .models import Users
 from django.contrib.auth.hashers import check_password
-import ghasedakpack
-from numpy.random import randint
+#import ghasedakpack
+#from numpy.random import randint
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 
-sms = ghasedakpack.Ghasedak("a26658f51d8f300e354cf8d137bca49aab329de737a80c80f507fb883b2ffeba")
+#sms = ghasedakpack.Ghasedak("a26658f51d8f300e354cf8d137bca49aab329de737a80c80f507fb883b2ffeba")
 
 
 
@@ -49,12 +49,8 @@ def login_view(request):
                     message = str(random_code)
                     receptor = phone
                     linenumber = "10008566"
-                    sms = ghasedakpack.Ghasedak("7cfab86d60b9fc7621f8a572dbec81d2628cfc6a387a05d724bc406d7848251f")
-                    sms.send({
-                        'message': message,
-                        'receptor': receptor,
-                        'linenumber': linenumber
-                    })
+                    #sms = ghasedakpack.Ghasedak("7cfab86d60b9fc7621f8a572dbec81d2628cfc6a387a05d724bc406d7848251f")
+                    #sms.send({'message': message,'receptor': receptor,'linenumber': linenumber})
 
                     # Store necessary data in session
                     request.session['temp_username'] = user.Username
