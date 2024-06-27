@@ -1,5 +1,6 @@
 from django.db import models
-
+from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 
 class Admins(models.Model):
@@ -10,8 +11,12 @@ class Admins(models.Model):
 
 class Storage(models.Model):
     id = models.AutoField(unique=True, primary_key=True)
-    Name = models.CharField(max_length=255, blank= False, unique=True)
-    Amount = models.CharField(max_length=255, blank= False)
+    date = models.DateTimeField(default=timezone.now)
+    sugar = models.FloatField(blank=False, default=0)
+    flour = models.FloatField(blank=False, default=0)
+    coffee = models.FloatField(blank=False, default=0)
+    chocolate = models.FloatField(blank=False, default=0)
+
 
 class Users(models.Model):
     Username = models.CharField(max_length=255, blank= False, unique=True, primary_key=True)
@@ -19,6 +24,7 @@ class Users(models.Model):
     Email = models.EmailField(max_length=255, blank= False, unique=True)
     Password = models.CharField(max_length=255, blank=False, unique=True, default= 000000)
     Phone_Number = models.IntegerField(max_length=11)
+
 class Product(models.Model):
     VERTICAL_CHOICES = [
         ('Shake', 'Shake'),
@@ -35,7 +41,6 @@ class Product(models.Model):
     Vertical = models.CharField(max_length=10, choices=VERTICAL_CHOICES)
 
 class Orders(models.Model):
-
     OrderID = models.AutoField(unique=True, primary_key=True)
     Username = models.ManyToManyField(Users, related_name='Orders')
     Products = models.ManyToManyField(Product, related_name= 'Orders')

@@ -73,7 +73,9 @@
                                 <input type="password" id="password" name="password" class="form-control" required>
                             </div>
                             <div class="center-login-btn">
-                                <button type="submit" class="btn btn-primary">Login</button>
+                                <a href="{% url 'login' %}">
+                                <button type="submit" class="btn btn-primary" formmethod="POST">Login</button>
+                                </a>
                             </div>
                         </form>
 
