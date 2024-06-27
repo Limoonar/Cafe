@@ -1,15 +1,15 @@
 from django.shortcuts import render, redirect
-from .models import Product
+from .models import *
 from django.contrib.auth import authenticate, login
-from .forms import LoginForm, RegistrationForm, OTPForm, ProductForm
+from .forms import LoginForm, RegistrationForm, OTPForm, ProductForm, UpdateInventoryForm
 from .models import Users
 from django.contrib.auth.hashers import check_password
-#import ghasedakpack
-#from numpy.random import randint
+import ghasedakpack
+from numpy.random import randint
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 
-#sms = ghasedakpack.Ghasedak("a26658f51d8f300e354cf8d137bca49aab329de737a80c80f507fb883b2ffeba")
+sms = ghasedakpack.Ghasedak("a26658f51d8f300e354cf8d137bca49aab329de737a80c80f507fb883b2ffeba")
 
 
 
@@ -118,7 +118,7 @@ def adminpage_view(request):
 def add_products_view(request):
     if request.session.get('username') != 'admin':
         return HttpResponseForbidden("You are not allowed to access this page.")
-
+ 
     if request.method == 'POST':
         form = ProductForm(request.POST)
         if form.is_valid():
@@ -133,4 +133,21 @@ def add_products_view(request):
 def inventory_management_view(request):
     if request.session.get('username') != 'admin':
         return HttpResponseForbidden("You are not allowed to access this page.")
-    return render(request, 'inventory_management.html')
+    if request.method == 'POST':
+        return redirect ('inventory_update')
+    if request.method == 'GET':
+        storage = Storage.objects.order_by('-id').first()
+        return render(request, 'inventory_management.html', {'storage': storage})
+
+
+def inventory_update_view(request):   
+    if request.method == 'POST':
+        #storage = request.POST
+        form = UpdateInventoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('inventory_management')
+    else:
+        form = UpdateInventoryForm()
+    return render(request, 'update_inventory.html', {'form': form})
+
