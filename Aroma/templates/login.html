@@ -17,7 +17,7 @@
             background: url('{% static "images/Login_Background.jpg" %}') no-repeat center center fixed;
             background-size: cover;
             position: relative; /* Ensure body is relatively positioned for absolute positioning */
-            min-height: 110vh; /* Ensure body fills the viewport */
+            min-height: 100vh; /* Ensure body fills the viewport */
         }
 
         .card {
@@ -34,7 +34,7 @@
 
         /* Styling for the footer */
         .footer {
-            position: relative;
+            position: absolute;
             bottom: 10; /* Adjust as needed */
             width: 100%;
             text-align: center;
@@ -47,20 +47,11 @@
             font-size: 24px; /* Larger font size */
             font-weight: bold;            
         }
-        header {
-            position: relative;
-            text-align: left;
-            width: 100%;
-            padding: 5px;
-            margin-left: 10px;
-            font-size: 24px; /* Larger font size */
-            font-weight: bold;   
-            color: #F4F3EE;         
-        }
+
     </style>   
 </head>
 <body>
-    <header>Aroma Cafe</header>
+
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
