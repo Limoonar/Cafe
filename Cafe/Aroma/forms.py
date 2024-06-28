@@ -49,3 +49,8 @@ class UpdateInventoryForm(forms.ModelForm):
     class Meta:
         model = Storage
         fields = ['id','date','sugar', 'flour', 'coffee', 'chocolate']
+
+class OrderForm(forms.ModelForm):
+    class Meta:
+        model = Orders
+        fields = ['Products', 'Purchase_amount', 'Type']

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aroma Cafe</title>
+    <!-- Add your CSS links here -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <!-- Add Bootstrap CSS for better styling -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">   
+    <!-- Add Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body style="background-color: #F5EBE0;">
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <a class="navbar-brand" href="#">Aroma Cafe</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" id="menu-icon"><i class="fas fa-bars"></i> Menu</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/customerpage/purchase/"><i class="fas fa-receipt"></i> Purchase Records</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-shopping-cart"></i> Cart</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout/"><i class="fas fa-user"></i> Logout</a>
+                    
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-sign-out-alt"></i> Exit</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Vertical Menu (hidden by default) -->
+    <div id="vertical-menu" class="vertical-menu">
+        <a href="#">Cold Drinks</a>
+        <a href="#">Hot Drinks</a>
+        <a href="#">Cake</a>
+        <a href="#">Food</a>
+    </div>
+
+    <!-- Slider -->
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="./image/slider1.jpg" class="d-block w-100" alt="coffee seed">
+            </div>
+            <div class="carousel-item">
+                <img src="./image/slider2.jpg" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="./image/slider3.jpg" class="d-block w-100" alt="...">
+            </div>
+        </div>
+        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+
+    <!-- Best Selling Products -->
+    <div class="container mt-5 best-selling-section">
+        <h2>12 Best Selling Products</h2>
+        <div class="row">
+            {% for product in best_selling_products %}
+                <div class="col-md-3">
+                    <div class="card">
+                        <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ product.Name }}</h5>
+                            <p class="card-text">${{ product.Price }}</p>
+                            <a href="{{ product.get_absolute_url }}" class="btn btn-primary">View Product</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Add your JS links here -->
+    <script src="{% static 'js/scripts.js' %}"></script>
+    <!-- Add jQuery and Bootstrap JS for better functionality -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Custom JavaScript to handle menu click -->
+    <script>
+        document.getElementById('menu-icon').addEventListener('click', function() {
+            document.getElementById('vertical-menu').classList.toggle('show');
+        });
+    </script>
+
+    <!-- Add your CSS for vertical menu -->
+    <style>
+        .best-selling-section {
+            background-color: #D6CCC2; 
+            padding: 20px; 
+            border-radius: 8px;
+        }
+        .vertical-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200px;
+            height: 100%;
+            background-color: #D6CCC2;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            padding-top: 60px;
+            z-index: 1050;
+        }
+        .vertical-menu a {
+            padding: 12px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #000;
+            display: block;
+        }
+        .vertical-menu a:hover {
+            background-color: #ddd;
+        }
+        .show {
+            display: block;
+        }
+        .carousel {
+            max-width: 1000px;
+            padding: 15px;
+            margin: 20px auto;
+        }
+        .carousel-inner img {
+            border-radius: 20px; /* Apply rounded corners to the images inside the carousel */
+        }        
+        .navbar-custom {
+            background-color: #582f0e; /* Change this to your desired color */
+        }   
+        .navbar-custom .navbar-brand,
+        .navbar-custom .nav-link {
+            color: rgb(255, 255, 255); /* Change the text color to contrast with the background */
+        } 
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+        }                
+    </style>
+</body>
+</html>

@@ -1,13 +1,13 @@
 from django.shortcuts import render, redirect
 from .models import *
 from django.contrib.auth import authenticate, login
-from .forms import LoginForm, RegistrationForm, OTPForm, ProductForm, UpdateInventoryForm
-from .models import Users
+from .forms import *
+from .models import Users, Orders
 from django.contrib.auth.hashers import check_password
 import ghasedakpack
 from numpy.random import randint
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponse
 
 sms = ghasedakpack.Ghasedak("a26658f51d8f300e354cf8d137bca49aab329de737a80c80f507fb883b2ffeba")
 
@@ -43,20 +43,21 @@ def login_view(request):
             if user:
                 # Manually compare hashed password
                 if password == user.Password:
-                    global phone, random_code
-                    random_code = randint(1000, 9999)
-                    phone = '0' + str(user.Phone_Number)
-                    message = str(random_code)
-                    receptor = phone
-                    linenumber = "10008566"
-                    #sms = ghasedakpack.Ghasedak("7cfab86d60b9fc7621f8a572dbec81d2628cfc6a387a05d724bc406d7848251f")
-                    #sms.send({'message': message,'receptor': receptor,'linenumber': linenumber})
+                    return redirect('customerpage')
+                    # global phone, random_code
+                    # random_code = randint(1000, 9999)
+                    # phone = '0' + str(user.Phone_Number)
+                    # message = str(random_code)
+                    # receptor = phone
+                    # linenumber = "10008566"
+                    # #sms = ghasedakpack.Ghasedak("7cfab86d60b9fc7621f8a572dbec81d2628cfc6a387a05d724bc406d7848251f")
+                    # #sms.send({'message': message,'receptor': receptor,'linenumber': linenumber})
 
-                    # Store necessary data in session
-                    request.session['temp_username'] = user.Username
-                    request.session['random_code'] = random_code
+                    # # Store necessary data in session
+                    # request.session['temp_username'] = user.Username
+                    # request.session['random_code'] = random_code
 
-                    return redirect('otp_verify')  # Redirect to OTP verification page
+                    # return redirect('otp_verify')  # Redirect to OTP verification page
                 else:
                     error = 'Invalid credentials'
             else:
@@ -108,6 +109,7 @@ def otp_verify_view(request):
     return render(request, 'otp_verify.html', {'form': form, 'error': error})
 
 
+# ADMIN PAGES
 @login_required
 def adminpage_view(request):
     if request.session.get('username') != 'admin':
@@ -151,3 +153,52 @@ def inventory_update_view(request):
         form = UpdateInventoryForm()
     return render(request, 'update_inventory.html', {'form': form})
 
+
+# CUSTOMER PAGES
+def customerpage_view(request):
+    #if request.session.get('username') == 'admin':
+    #    return HttpResponseForbidden("You are not allowed to access this page.")
+    return render(request, 'customerpage.html')
+
+
+
+
+def purchase_view(request):
+    if request.method == 'POST':
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            order = form.save(commit=False)
+            
+            # Assume we get the username from a session or form input
+            # For demonstration, let's assume it's from the session
+            username = request.session.get('username_or_email')
+            if not username:
+                return HttpResponse('User is not logged in', status=401)
+
+            try:
+                # Fetch the user from your custom Users model
+                user = Users.objects.get(Username=username)
+                order.save()  # Save the order before adding Many-to-Many relations
+                order.Username.add(user)  # Add the user to the Many-to-Many field
+                order.save()  # Save again after adding relations
+
+                return redirect('purchase_success')
+            except Users.DoesNotExist:
+                try:
+                    user = Users.objects.get(Email=username)
+                    order.save()  # Save the order before adding Many-to-Many relations
+                    order.Username.add(user)  # Add the user to the Many-to-Many field
+                    order.save()  # Save again after adding relations
+                except:
+                    return HttpResponse('User not found', status=404)
+    else:
+        form = OrderForm()
+
+    return render(request, 'purchase.html', {'form': form})
+
+
+# PRODUCTS
+def hotdrinks_view(request):
+    products = Product.objects.filter(Vertical="Hot Drink")
+    context = {'products':products}
+    return render(request, 'Hot_Drink.html', context)

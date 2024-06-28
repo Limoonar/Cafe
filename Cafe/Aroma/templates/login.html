@@ -62,21 +62,25 @@
                     <div class="card-header">Login to Your Account</div>
                     <div class="card-body">
                         <!-- Standard username/password login form -->
-                        <form method="POST">
+                        <form method="POST" action="{% url 'login' %}">
                             {% csrf_token %}
+                            {% if error %}
+                            <p class="text-center text-danger font-weight-bold">{{ error|title }}</p>
+                            {% endif %}
                             <div class="form-group">
-                                <label for="username">Username or Email</label>
-                                <input type="text" id="username" name="username" class="form-control" required autofocus>
+                                <label for="username_or_email">Username or Email</label>
+                                <input type="text" id="username_or_email" name="username_or_email" class="form-control" required autofocus>
                             </div>
                             <div class="form-group">
-                                <label for="password">Password</label>
-                                <input type="password" id="password" name="password" class="form-control" required>
+                                <label for="Password">Password</label>
+                                <input type="password" id="Password" name="Password" class="form-control" required>
+                            </div>
                             </div>
                             <div class="center-login-btn">
-                                <a href="{% url 'login' %}">
-                                <button type="submit" class="btn btn-primary" formmethod="POST">Login</button>
-                                </a>
+                                <!--<button type="submit" class="btn btn-primary">Login</button>-->
+                                <button type="submit" class="btn btn-primary">Login</button>
                             </div>
+                            
                         </form>
 
                         <!-- OR option for Mobile Number OTP login -->

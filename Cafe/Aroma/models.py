@@ -27,9 +27,10 @@ class Users(models.Model):
 
 class Product(models.Model):
     VERTICAL_CHOICES = [
-        ('Shake', 'Shake'),
+        ('Cold Drink', 'Cold Drink'),
         ('Cake', 'Cake'),
-        ('Cookie', 'Cookie'),
+        ('Hot Drink', 'Hot Drink'),
+        ('Food', 'Food')
     ]
     id = models.AutoField(unique=True, primary_key=True)
     Name = models.CharField(unique=True, max_length=255)
@@ -41,8 +42,42 @@ class Product(models.Model):
     Vertical = models.CharField(max_length=10, choices=VERTICAL_CHOICES)
 
 class Orders(models.Model):
+    CHOICES = [
+        (1, 'Take Away'),
+        (2, 'In Person'),
+             ]
     OrderID = models.AutoField(unique=True, primary_key=True)
     Username = models.ManyToManyField(Users, related_name='Orders')
     Products = models.ManyToManyField(Product, related_name= 'Orders')
     Purchase_amount = models.IntegerField(max_length=10)
-    Type = models.CharField(max_length=10)
+    Type = models.IntegerField(choices=CHOICES)
+
+    
+    def save(self, *args, **kwargs):
+        super(Orders, self).save(*args, **kwargs)
+        self.update_inventory()
+
+    def update_inventory(self):
+        for product in self.Products.all():
+            try:
+                storage = Storage.objects.latest('id')  # Assuming you have the latest storage entry
+                if (storage.sugar >= product.Sugar * self.Purchase_amount and
+                    storage.coffee >= product.Coffee * self.Purchase_amount and
+                    storage.flour >= product.Flour * self.Purchase_amount and
+                    storage.chocolate >= product.Chocolate * self.Purchase_amount):
+                    
+                    # Reduce inventory
+                    storage.sugar -= product.Sugar * self.Purchase_amount
+                    storage.coffee -= product.Coffee * self.Purchase_amount
+                    storage.flour -= product.Flour * self.Purchase_amount
+                    storage.chocolate -= product.Chocolate * self.Purchase_amount
+                    storage.save()
+                else:
+                    # Raise an error or handle insufficient stock situation
+                    raise ValidationError("Insufficient stock for product: {}".format(product.Name))
+            except Storage.DoesNotExist:
+                raise ValidationError("Storage does not exist. Please initialize storage.")
+
+    def __str__(self):
+        return f"Order {self.OrderID}"
+

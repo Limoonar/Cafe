@@ -8,9 +8,16 @@ urlpatterns = [
     path('register/', views.register_view, name='register'),
     path('logout/', views.logout_view, name='logout'),
     path('otp_verify/', views.otp_verify_view, name='otp_verify'),
+    # ADMIN
     path('adminpage/', views.adminpage_view, name='adminpage'),
     path('adminpage/add_products/', views.add_products_view, name='add_products'),
     path('adminpage/inventory_management/', views.inventory_management_view, name='inventory_management'),
     path('adminpage/inventory_update/', views.inventory_update_view , name = 'inventory_update'),
+    # CUSTOMER
+    path('customerpage/', views.customerpage_view, name='customerpage'),
+    path('customerpage/purchase/', views.purchase_view, name='purchase'),
+    #path('customerpage/purchase/success/', views.purchase_success_view, name='purchase_success'),
+    # PRODUCTS
+    path('hotdrink/', views.hotdrinks_view, name='hotdrink'),
     # Other URLs for your views
 ]
