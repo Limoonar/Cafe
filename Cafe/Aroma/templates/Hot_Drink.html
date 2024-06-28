@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Add Bootstrap CSS for better styling -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Add Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        .product-card {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 10px;
+            text-align: center;
+            border-radius: 10px;
+        }
+        .category-nav a {
+            margin-right: 10px;
+        }
+        .add-to-cart-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .nav-bar {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .nav-bar a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #555;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .nav-bar .active {
+            font-weight: bold;
+            color: #654321; /* Dark brown color */
+        }
+    </style>
+</head>
+<body>
+        <!-- Navigation bar with words -->
+        <div class="nav-bar">
+            <a id="Hot Drink" onclick="setActive(this)">Hot Drink</a>
+            <a id="Cold Drink" onclick="setActive(this)">Cold Drink</a>
+            <a id="Cake" onclick="setActive(this)">Cake</a>
+            <a id="Food" onclick="setActive(this)">Food</a>
+        </div>
+    
+    
+        <!-- JavaScript to handle the click and apply the active class -->
+        <script>
+            function setActive(element) {
+                // Remove the active class from all links
+                var links = document.querySelectorAll('.nav-bar a');
+                links.forEach(link => {
+                    link.classList.remove('active');
+                });
+    
+                // Add the active class to the clicked link
+                element.classList.add('active');
+            }
+        </script>
+    <div class="row">
+        {% for product in products %}
+            <div class="col-md-3">
+                <div class="product-card">
+                    <h3>{{ product.Name }}</h3>
+                    <p>Price: ${{ product.Price }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+</div>
+</body>
+</html>
