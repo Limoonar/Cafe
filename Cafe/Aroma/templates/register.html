@@ -1,125 +1,20 @@
+<!-- templates/register.html -->
+
 <!DOCTYPE html>
-{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
-
-    <!-- Add Bootstrap CSS for better styling -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- Add Font Awesome CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <style>
-        body {
-            background: url('{% static "images/Register_Background3.jpg" %}') no-repeat center center fixed;
-            background-size: cover;
-            position: relative; /* Ensure body is relatively positioned for absolute positioning */
-            min-height: 123vh; /* Ensure body fills the viewport */
-        }
-
-        .card {
-            background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent white background for the form */
-            border-radius: 10px;
-        }
-
-        .center-register-btn {
-            display: flex;
-            justify-content: center;
-        }
-
-        .footer {
-            position: absolute;
-            bottom: 23px; /* Adjust as needed */
-            width: 100%;
-            text-align: center;
-            color: #F4F3EE; /* Text color */
-            font-size: 24px; /* Larger font size */
-            font-weight: bold; /* Bold text */
-        
-        }
-        header {
-            position: relative;
-            text-align: left;
-            width: 100%;
-            padding: 5px;
-            margin-left: 10px;
-            font-size: 24px; /* Larger font size */
-            font-weight: bold;   
-            color: #582f0e;         
-        }
-        .footer a {
-            color: #F4F3EE; /* Ensure link color is white */
-            text-decoration: none; /* Remove underline */
-        }
-        header a {
-            color: #582f0e; /* Ensure link color is white */
-            text-decoration: none; /* Remove underline */
-        }
-        header a:hover, .footer a:hover {
-            text-decoration: underline; /* Underline on hover */
-        }
-    </style>
 </head>
 <body>
-    <header>
-        <a href="{% url 'index' %}">Aroma Cafe</a>
-    </header>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">Create Your Account</div>
-                    <div class="card-body">
-                        <form method="POST" action="{% url 'register' %}">
-                            {% csrf_token %}
-                            <div class="form-group">
-                                <label for="first_name">First Name</label>
-                                <input type="text" id="first_name" name="first_name" class="form-control" required autofocus>
-                            </div>
-                            <div class="form-group">
-                                <label for="last_name">Last Name</label>
-                                <input type="text" id="last_name" name="last_name" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="username">Username</label>
-                                <input type="text" id="username" name="username" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" id="email" name="email" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="password">Password</label>
-                                <input type="password" id="password" name="password" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="phone_number">Phone Number</label>
-                                <input type="text" id="phone_number" name="phone_number" class="form-control" required>
-                            </div>
-                            <div class="center-register-btn">
-                                <button type="submit" class="btn btn-primary">Register</button>
-                            </div>
-                        </form>
+    <h2>Register Your Account</h2>
 
-                        <!-- Login link -->
-                        <div class="mt-3">
-                            <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="footer">
-        <a href="{% url 'index' %}">Aroma Cafe</a>
-    </div>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Register">
+    </form>
 
-    <!-- Add your JS links here -->
-
-    <!-- Add jQuery and Bootstrap JS for better functionality -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
 </body>
 </html>

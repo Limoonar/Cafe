@@ -17,7 +17,7 @@
             background: url('{% static "images/Login_Background.jpg" %}') no-repeat center center fixed;
             background-size: cover;
             position: relative; /* Ensure body is relatively positioned for absolute positioning */
-            min-height: 110vh; /* Ensure body fills the viewport */
+            min-height: 100vh; /* Ensure body fills the viewport */
         }
 
         .card {
@@ -29,12 +29,11 @@
         .center-login-btn {
             display: flex;
             justify-content: center;
-            font-weight: bold;
         }
 
         /* Styling for the footer */
         .footer {
-            position: relative;
+            position: absolute;
             bottom: 10; /* Adjust as needed */
             width: 100%;
             text-align: center;
@@ -47,20 +46,15 @@
             font-size: 24px; /* Larger font size */
             font-weight: bold;            
         }
-        header {
-            position: relative;
-            text-align: left;
-            width: 100%;
-            padding: 5px;
-            margin-left: 10px;
+        .center-login-btn {
+            text-align: center;
             font-size: 24px; /* Larger font size */
-            font-weight: bold;   
-            color: #F4F3EE;         
+            font-weight: bold;            
         }
     </style>   
 </head>
 <body>
-    <header>Aroma Cafe</header>
+
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
@@ -68,23 +62,41 @@
                     <div class="card-header">Login to Your Account</div>
                     <div class="card-body">
                         <!-- Standard username/password login form -->
-                        <form method="POST" action="{% url 'login' %}">
+                        <form method="POST">
                             {% csrf_token %}
                             <div class="form-group">
-                                <label for="username_or_email">Username or Email</label>
-                                <input type="text" id="username_or_email" name="username_or_email" class="form-control" required autofocus>
+                                <label for="username">Username or Email</label>
+                                <input type="text" id="username" name="username" class="form-control" required autofocus>
                             </div>
                             <div class="form-group">
-                                <label for="Password">Password</label>
-                                <input type="password" id="Password" name="Password" class="form-control" required>
+                                <label for="password">Password</label>
+                                <input type="password" id="password" name="password" class="form-control" required>
                             </div>
                             <div class="center-login-btn">
-                                <button type="submit" class="btn btn-primary">Login</button>
+                                <a href="{% url 'login' %}">
+                                <button type="submit" class="btn btn-primary" formmethod="POST">Login</button>
+                                </a>
                             </div>
                         </form>
 
                         <!-- OR option for Mobile Number OTP login -->
-
+                        <hr>
+                        <div class="text-center mb-3">
+                            <h4>Login with OTP</h4>
+                        </div>
+                        <form id="otpForm" method="POST" action="{% url 'otp_verify' %}">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="mobileNumber">Mobile Number</label>
+                                <input type="text" id="mobileNumber" name="mobileNumber" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="otp">OTP</label>
+                                <input type="text" id="otp" name="otp" class="form-control" required>
+                            </div>
+                            <div class="center-login-btn">
+                                <button type="submit" class="btn btn-primary">Login with OTP</button>
+                            </div>
                         </form>
 
                         <!-- Registration link -->
@@ -102,46 +114,41 @@
 
     <!-- Add your JS links here -->
 
-<!-- Add jQuery and Bootstrap JS for better functionality -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script>
-    // Example script to handle OTP form submission
-    $(document).ready(function() {
-        $('#otpForm').on('submit', function(event) {
-            event.preventDefault();
-            var mobileNumber = $('#mobileNumber').val();
-            var otp = $('#otp').val();
-            // You may add additional validation here
+    <!-- Add jQuery and Bootstrap JS for better functionality -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Example script to handle OTP form submission
+        $(document).ready(function() {
+            $('#otpForm').on('submit', function(event) {
+                event.preventDefault();
+                var mobileNumber = $('#mobileNumber').val();
+                var otp = $('#otp').val();
+                // You may add additional validation here
 
-            // AJAX request to Django view to verify OTP
-            $.ajax({
-                type: 'POST',
-                url: '{% url "otp_verify" %}',
-                data: {
-                    'mobileNumber': mobileNumber,
-                    'otp': otp,
-                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
-                },
-                success: function(response) {
-                    if (response.status === 'success') {
+                // AJAX request to Django view to verify OTP
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "otp_verify" %}',
+                    data: {
+                        'mobileNumber': mobileNumber,
+                        'otp': otp,
+                        'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                    },
+                    success: function(response) {
                         // Handle successful login response
+                        // For example, redirect to main page
                         window.location.href = '{% url "index" %}';
-                    } else {
+                    },
+                    error: function(xhr, errmsg, err) {
                         // Handle error response
-                        alert(response.message);
+                        console.log(xhr.status + ": " + xhr.responseText); // Log error for debugging
+                        alert("Failed to login with OTP. Please check your mobile number and OTP.");
                     }
-                },
-                error: function(xhr, errmsg, err) {
-                    // Handle error response
-                    console.log(xhr.status + ": " + xhr.responseText); // Log error for debugging
-                    alert("Failed to login with OTP. Please check your mobile number and OTP.");
-                }
+                });
             });
         });
-    });
-</script>
-
+    </script>
 </body>
 </html>
