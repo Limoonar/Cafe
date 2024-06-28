@@ -45,7 +45,7 @@ def login_view(request):
                 if password == user.Password:
                     global phone, random_code
                     random_code = randint(1000, 9999)
-                    phone = str(user.Phone_Number)
+                    phone = '0'+ str(user.Phone_Number)
                     message = str(random_code)
                     receptor = phone
                     linenumber = "10008566"
