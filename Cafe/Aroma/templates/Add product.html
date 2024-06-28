@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee Shop Admin Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-xxx" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column; /* Stack content vertically */
+            min-height: 100vh; /* Ensure full viewport height */
+            justify-content: center; /* Center content vertically */
+            align-items: center; /* Center content horizontally */
+            position: relative; /* Position relative for absolute positioning */
+        }
+        .sidebar {
+            background-color: #B9AC94;
+            color: #fff;
+            padding: 15px;
+            width: 200px;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+        .sidebar a {
+            display: flex;
+            align-items: center; /* Align items vertically */
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 15px; /* Adjust padding */
+            margin: 5px 0;
+        }
+        .sidebar a:hover {
+            background-color: #D6CCC2;
+        }
+        .sidebar .icon {
+            margin-right: 10px; /* Space between icon and text */
+        }
+        .sidebar .active {
+            background-color: #D6CCC2; /* Highlight color for active link */
+        }
+        .container {
+            margin-left: 220px;
+            padding: 20px;
+            background: #F8F7F5;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%; /* Ensure it takes full width of container */
+            box-sizing: border-box; /* Include padding and border in width calculation */
+            flex: 1; /* Allow container to grow and occupy remaining space */
+            overflow-y: auto; /* Enable vertical scrolling if content exceeds container height */
+            display: flex;
+            flex-direction: column; /* Stack content vertically */
+            justify-content: center; /* Center content vertically */
+            align-items: center; /* Center content horizontally */
+        }
+        .add-product-header {
+            margin-top: 20px;
+            text-align: center; /* Center header text */
+        }
+        .add-product-form {
+            padding: 30px;
+            margin-top: 10px;
+            border-radius: 5px;
+            width: 100%; /* Ensure it takes full width */
+            box-sizing: border-box; /* Include padding and border in width calculation */
+            max-width: 600px; /* Limit maximum width */
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: calc(100% - 16px); /* Adjust for padding */
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .form-group input[type="file"] {
+            padding: 3px;
+        }
+        .btn {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            float: right; /* Float the button to the right */
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100px; /* Adjust sidebar width for smaller screens */
+            }
+            .container {
+                margin-left: 120px; /* Adjust margin for smaller screens */
+                width: calc(100% - 140px); /* Adjust width for smaller screens */
+            }
+        }
+        .sidebar-img {
+            width: 20px; /* Adjust the size of the image */
+            height: auto;
+            margin-right: 10px; /* Optional: Add spacing between image and text */
+        }
+        .footer {
+            text-align: center;
+            background-color: #f8f8f8;
+            padding: 10px 0;
+            width: 100%;
+            flex-shrink: 0; /* Prevent footer from shrinking */
+            margin-top: auto; /* Push footer to the bottom */
+        }
+        .footer-icons {
+            margin-top: 0px;
+            font-size: 24px;
+        }
+        .footer-icons a {
+            color: #333;
+            text-decoration: none;
+            margin: 0 0px;
+        }
+        .footer-icons a:hover {
+            color: #000;
+        }
+        .logo-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: auto;
+            height: 100px; /* Adjust height to make it twice as large */
+        }
+        .logo-container img {
+            height: 100%; /* Ensure the logo fills the container height */
+            width: auto; /* Maintain the aspect ratio */
+        }
+        .footer img {
+            max-width: 200px; /* Adjust this value to control the size of the footer image */
+            height: auto;
+            margin-bottom: 0px; /* Space between image and text */
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <a href="#vault-management">
+            <img src="C:\Users\Azar\Documents\GitHub\Cafe\images\25694.png" alt="Vault Icon" class="sidebar-img"> Vault Management
+        </a>
+        <a href="#add-product" class="active"> <!-- Added class "active" to highlight -->
+            <img src="C:\Users\Azar\Documents\GitHub\Cafe\images\images.png" alt="Add Icon" class="sidebar-img"> Add Product
+        </a>
+        <a href="#logout">
+            <img src="C:\Users\Azar\Documents\GitHub\Cafe\images\exit.png" alt="Logout Icon" class="sidebar-img"> Log Out of Admin
+        </a>
+    </div>
+    <!-- Logo container outside sidebar, positioned at top-right of the page -->
+    <div class="logo-container">
+        <img src="C:\Users\Azar\Documents\GitHub\Cafe\images\Aroma logo.png" alt="Your Logo">
+    </div>
+    <div class="container">
+        <h2 class="add-product-header">Add New Product:</h2>
+        <section class="add-product-form">
+            <form>
+                <div class="form-group">
+                    <label for="product-name">Product Name:</label>
+                    <input type="text" id="product-name" name="product-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="category">Category:</label>
+                    <select id="category" name="category" required>
+                        <option value="Cold coffee">Cold coffee</option>
+                        <option value="Hot Coffee">Hot Coffee</option>
+                        <option value="cake">Cake</option>
+                        <option value="Food">Food</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="ingredients">Ingredients:</label>
+                    <textarea id="ingredients" name="ingredients" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="product-price">Price:</label>
+                    <input type="number" id="product-price" name="product-price" required>
+                </div>
+                <div class="form-group">
+                    <label for="product-image">Product Image:</label>
+                    <input type="file" id="product-image" name="product-image" required>
+                </div>
+                <button type="submit" class="btn">Add Product</button>
+            </form>
+        </section>
+    </div>
+    <div class="footer">
+        <img src="C:\Users\Azar\Documents\GitHub\Cafe\images\Group 174.png" alt="Footer Image Placeholder"> <!-- Placeholder for the footer image -->
+        <div class="footer-icons">
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-telegram"></i></a>
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+        <p>&copy; 2024 Aroma Cafe</p>
+    </div>
+</body>
+</html>

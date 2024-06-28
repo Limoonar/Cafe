@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History of Purchases</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-xxx" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('path_to_your_background_image'); /* Add your background image URL here */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .header {
+            background-color: #B9AC94;
+            color: #fff;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* Align items horizontally */
+        }
+        .header h1 {
+            margin: 0;
+        }
+        .home-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #fff;
+        }
+        .home-link .home-image {
+            margin-right: 5px; /* Adjust spacing between image and text */
+            width: 20px; /* Adjust image width */
+            height: auto; /* Maintain aspect ratio */
+        }
+        .container {
+            margin: 20px auto;
+            padding: 20px;
+            background: #D9D9D9;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: calc(100% - 40px);
+            box-sizing: border-box;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #080808;
+            padding: 8px; /* Default padding */
+            text-align: left;
+        }
+        th {
+            background-color: #696766;
+        }
+        /* Adjust spacing for specific columns */
+        th:first-child,
+        td:first-child {
+            padding-right: 20px; /* Increase padding for the first column */
+        }
+        .footer {
+            text-align: center;
+            background-color: #f8f8f8;
+            padding: 10px 0;
+            width: 100%;
+            flex-shrink: 0;
+            margin-top: auto;
+        }
+        .footer-icons {
+            margin-top: 0px;
+            font-size: 24px;
+        }
+        .footer-icons a {
+            color: #333;
+            text-decoration: none;
+            margin: 0 0px;
+        }
+        .footer-icons a:hover {
+            color: #000;
+        }
+        .logo-container {
+            top: 5px;
+            right: 10px;
+            height: 100px; /* Adjust the height of the logo to be three times larger */
+        }
+        .logo-container img {
+            height: 100%; /* Ensure the logo fills the container height */
+            width: auto; /* Maintain the aspect ratio */
+        }
+        .footer img {
+            max-width: 200px; /* Adjust this value to control the size of the footer image */
+            height: auto;
+            margin-bottom: 1px; /* Space between image and text */
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="#" class="home-link">
+            <img src="C:\Users\Azar\Documents\GitHub\Cafe\images\25694.png" alt="Home" class="home-image"> Home
+        </a>
+        <!-- Placeholder for your logo -->
+        <div class="logo-container">
+            <img src="C:\Users\Azar\Documents\GitHub\Cafe\images\Aroma logo.png" alt="Your Logo">
+        </div>
+    </div>
+    <div class="container">
+        <h2>History of Purchases</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Order Number</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Total Price Paid</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Replace with dynamic data or use JavaScript to populate -->
+                <tr>
+                    <td>1</td>
+                    <td>2024-06-28</td>
+                    <td>14:30</td>
+                    <td>$25.00</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>2024-06-29</td>
+                    <td>10:15</td>
+                    <td>$32.50</td>
+                </tr>
+                <!-- Add more rows as needed -->
+            </tbody>
+        </table>
+    </div>
+    <div class="footer">
+        <img src="C:\Users\Azar\Documents\GitHub\Cafe\images\Group 174.png" alt="Footer Image Placeholder"> <!-- Placeholder for the footer image -->
+        <div class="footer-icons">
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-telegram"></i></a>
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+        <p>&copy; 2024 Aroma Cafe</p>
+    </div>
+</body>
+</html>
