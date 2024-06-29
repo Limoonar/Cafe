@@ -1,8 +1,7 @@
-<!-- products_page.html -->
+{% load static %}
+{% load custom_filters %}
 
 <!DOCTYPE html>
-{% load static %}
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -66,9 +65,9 @@
                                 {% csrf_token %}
                                 <div class="form-group">
                                     <label for="quantity">Quantity:</label>
-                                    <input type="number" name="quantity" min="1" value="1" class="form-control" id="quantity">
+                                    <input type="number" name="quantity" min="0" value="{{ cart|get_item:product.id|default_if_none:1 }}" class="form-control" id="quantity">
                                 </div>
-                                <button type="submit" class="btn btn-primary">Add To Cart</button>
+                                <button type="submit" class="btn btn-primary">Update Cart</button>
                             </form>
                         </div>
                     </div>

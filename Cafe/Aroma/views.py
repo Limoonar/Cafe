@@ -225,30 +225,33 @@ def products_page_view(request):
 
 def products_page_view(request):
     vertical = request.GET.get('vertical', 'All')
-
     if vertical == 'All':
         products = Product.objects.all()
     else:
         products = Product.objects.filter(Vertical=vertical)
 
-    context = {
-        'vertical': vertical,
-        'products': products,
-        'vertical_choices': Product.VERTICAL_CHOICES,
-    }
-    return render(request, 'products_page.html', context)
+    cart = request.session.get('cart', {})
 
+    context = {
+        'products': products,
+        'vertical': vertical,
+        'vertical_choices': Product.VERTICAL_CHOICES,
+        'cart': cart
+    }
+
+    return render(request, 'products_page.html', context)
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-    quantity = int(request.POST.get('quantity', 1))
+    quantity = int(request.POST.get('quantity', 1))  # Get the new quantity from the form
 
     cart = request.session.get('cart', {})
 
-    if str(product_id) in cart:
-        cart[str(product_id)] += quantity
+    if quantity > 0:
+        cart[str(product_id)] = quantity  # Set the exact quantity
     else:
-        cart[str(product_id)] = quantity
+        if str(product_id) in cart:
+            del cart[str(product_id)]  # Remove item from cart if quantity is 0 or less
 
-    request.session['cart'] = cart
+    request.session['cart'] = cart  # Save the updated cart in session
 
     return redirect('products')
