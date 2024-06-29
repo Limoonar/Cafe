@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from django.contrib.auth import authenticate, login
 from .forms import *
@@ -44,6 +44,7 @@ def login_view(request):
                 # Manually compare hashed password
                 if password == user.Password:
                     request.session['username'] = user.Username
+                    request.session['cart']= {}
                     return redirect('index')
                     # global phone, random_code
                     # random_code = randint(1000, 9999)
@@ -221,3 +222,33 @@ def products_page_view(request):
         'vertical_choices': Product.VERTICAL_CHOICES,
     }
     return render(request, 'products_page.html', context)
+
+def products_page_view(request):
+    vertical = request.GET.get('vertical', 'All')
+
+    if vertical == 'All':
+        products = Product.objects.all()
+    else:
+        products = Product.objects.filter(Vertical=vertical)
+
+    context = {
+        'vertical': vertical,
+        'products': products,
+        'vertical_choices': Product.VERTICAL_CHOICES,
+    }
+    return render(request, 'products_page.html', context)
+
+def add_to_cart(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    quantity = int(request.POST.get('quantity', 1))
+
+    cart = request.session.get('cart', {})
+
+    if str(product_id) in cart:
+        cart[str(product_id)] += quantity
+    else:
+        cart[str(product_id)] = quantity
+
+    request.session['cart'] = cart
+
+    return redirect('products')

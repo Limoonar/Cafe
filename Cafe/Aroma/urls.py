@@ -19,5 +19,6 @@ urlpatterns = [
     #path('customerpage/purchase/success/', views.purchase_success_view, name='purchase_success'),
     # PRODUCTS
     path('products/', views.products_page_view, name='products'),
+    path('add_to_cart/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
     # Other URLs for your views
 ]
