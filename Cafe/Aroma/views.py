@@ -255,3 +255,52 @@ def add_to_cart(request, product_id):
     request.session['cart'] = cart  # Save the updated cart in session
 
     return redirect('products')
+
+
+def cart_view(request):
+    cart = request.session.get('cart', {})
+    products_in_cart = []
+    total_price = 0
+
+    for product_id, quantity in cart.items():
+        product = get_object_or_404(Product, id=product_id)
+        products_in_cart.append({
+            'product': product,
+            'quantity': quantity,
+            'total': product.Price * quantity
+        })
+        total_price += product.Price * quantity
+
+    context = {
+        'products_in_cart': products_in_cart,
+        'total_price': total_price
+    }
+    
+    return render(request, 'cart_page.html', context)
+
+
+def update_cart(request, product_id):
+    if request.method == 'POST':
+        cart = request.session.get('cart', {})
+        quantity = int(request.POST.get('quantity', 1))
+
+        if quantity > 0:
+            cart[str(product_id)] = quantity
+        else:
+            if str(product_id) in cart:
+                del cart[str(product_id)]
+
+        request.session['cart'] = cart
+
+    return redirect('cart')
+
+def remove_from_cart(request, product_id):
+    if request.method == 'POST':
+        cart = request.session.get('cart', {})
+
+        if str(product_id) in cart:
+            del cart[str(product_id)]
+
+        request.session['cart'] = cart
+
+    return redirect('cart')
