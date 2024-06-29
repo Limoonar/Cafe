@@ -29,11 +29,12 @@
         .center-login-btn {
             display: flex;
             justify-content: center;
+            font-weight: bold;
         }
 
         /* Styling for the footer */
         .footer {
-            position: absolute;
+            position: relative;
             bottom: 10; /* Adjust as needed */
             width: 100%;
             text-align: center;
@@ -46,15 +47,29 @@
             font-size: 24px; /* Larger font size */
             font-weight: bold;            
         }
-        .center-login-btn {
-            text-align: center;
+        header {
+            position: relative;
+            text-align: left;
+            width: 100%;
+            padding: 5px;
+            margin-left: 10px;
             font-size: 24px; /* Larger font size */
-            font-weight: bold;            
+            font-weight: bold;   
+            color: #F4F3EE;         
+        }
+        .footer a {
+            color: #582f0e; /* Ensure link color is white */
+            text-decoration: none; /* Remove underline */
+        }
+        header a:hover, .footer a:hover {
+            text-decoration: underline; /* Underline on hover */
         }
     </style>   
 </head>
 <body>
-
+<header>
+    <a href="{% url 'index' %}"> <img src="{% static 'images/logo.png' %}" alt="Aroma Cafe Logo" style="height: 60px;"> </a>
+</header>
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
@@ -75,12 +90,9 @@
                                 <label for="Password">Password</label>
                                 <input type="password" id="Password" name="Password" class="form-control" required>
                             </div>
-                            </div>
                             <div class="center-login-btn">
-                                <!--<button type="submit" class="btn btn-primary">Login</button>-->
                                 <button type="submit" class="btn btn-primary">Login</button>
                             </div>
-                            
                         </form>
 
                         <!-- OR option for Mobile Number OTP login -->
@@ -112,9 +124,15 @@
             </div>
         </div>
     </div>
-    <div class="footer">
-        <p>Aroma Cafe</p>
-    </div>
+    <footer class="footer mt-5 py-4 text-center" style="color: #582f0e;">
+        <div class="container">
+            <p>&copy; 2024 <a href="{% url 'index' %}">Aroma Cafe</a></p>
+            <a href="#" style="color: #582f0e;" class="mx-2"><i class="fab fa-instagram"></i></a>
+            <a href="#" style="color: #582f0e;" class="mx-2"><i class="fab fa-telegram"></i></a>
+            <a href="#" style="color: #582f0e;" class="mx-2"><i class="fab fa-facebook"></i></a>
+            <a href="#" style="color: #582f0e;" class="mx-2"><i class="fab fa-youtube"></i></a>
+        </div>
+    </footer>   
 
     <!-- Add your JS links here -->
 
@@ -140,11 +158,15 @@
                         'otp': otp,
                         'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
                     },
-                    success: function(response) {
+                success: function(response) {
+                    if (response.status === 'success') {
                         // Handle successful login response
-                        // For example, redirect to main page
                         window.location.href = '{% url "index" %}';
-                    },
+                    } else {
+                        // Handle error response
+                        alert(response.message);
+                    }
+                },
                     error: function(xhr, errmsg, err) {
                         // Handle error response
                         console.log(xhr.status + ": " + xhr.responseText); // Log error for debugging

@@ -43,7 +43,8 @@ def login_view(request):
             if user:
                 # Manually compare hashed password
                 if password == user.Password:
-                    return redirect('customerpage')
+                    request.session['username'] = user.Username
+                    return redirect('index')
                     # global phone, random_code
                     # random_code = randint(1000, 9999)
                     # phone = '0' + str(user.Phone_Number)
@@ -110,7 +111,7 @@ def otp_verify_view(request):
 
 
 # ADMIN PAGES
-@login_required
+#@login_required
 def adminpage_view(request):
     if request.session.get('username') != 'admin':
         return HttpResponseForbidden("You are not allowed to access this page.")
@@ -129,9 +130,9 @@ def add_products_view(request):
     else:
         form = ProductForm()
 
-    return render(request, 'add_products.html', {'form': form})
+    return render(request, 'Add_productss.html', {'form': form})
 
-@login_required
+#@login_required
 def inventory_management_view(request):
     if request.session.get('username') != 'admin':
         return HttpResponseForbidden("You are not allowed to access this page.")
