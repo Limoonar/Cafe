@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from .models import *
 from django.contrib.auth import authenticate, login
 from .forms import *
-from .models import Users, Orders
+from .models import Users, Orders, Product
 from django.contrib.auth.hashers import check_password
 import ghasedakpack
 from numpy.random import randint
@@ -199,7 +199,25 @@ def purchase_view(request):
 
 
 # PRODUCTS
-def hotdrinks_view(request):
-    products = Product.objects.filter(Vertical="Hot Drink")
-    context = {'products':products}
-    return render(request, 'Hot_Drink.html', context)
+#def hotdrinks_view(request):
+    #products = Product.objects.filter(Vertical="Hot Drink")
+    #context = {'products':products}
+    #return render(request, 'Hot_Drink.html', context)
+
+# views.py
+
+
+def products_page_view(request):
+    vertical = request.GET.get('vertical', 'All')
+
+    if vertical == 'All':
+        products = Product.objects.all()
+    else:
+        products = Product.objects.filter(Vertical=vertical)
+
+    context = {
+        'vertical': vertical,
+        'products': products,
+        'vertical_choices': Product.VERTICAL_CHOICES,
+    }
+    return render(request, 'products_page.html', context)

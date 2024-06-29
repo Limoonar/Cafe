@@ -18,6 +18,6 @@ urlpatterns = [
     path('customerpage/purchase/', views.purchase_view, name='purchase'),
     #path('customerpage/purchase/success/', views.purchase_success_view, name='purchase_success'),
     # PRODUCTS
-    path('hotdrink/', views.hotdrinks_view, name='hotdrink'),
+    path('products/', views.products_page_view, name='products'),
     # Other URLs for your views
 ]
