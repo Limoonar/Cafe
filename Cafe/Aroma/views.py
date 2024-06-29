@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from django.contrib.auth import authenticate, login
 from .forms import *
-from .models import Users, Orders
+from .models import Users, Orders, Product
 from django.contrib.auth.hashers import check_password
 import ghasedakpack
 from numpy.random import randint
@@ -44,6 +44,7 @@ def login_view(request):
                 # Manually compare hashed password
                 if password == user.Password:
                     request.session['username'] = user.Username
+                    request.session['cart']= {}
                     return redirect('index')
                     # global phone, random_code
                     # random_code = randint(1000, 9999)
@@ -199,7 +200,107 @@ def purchase_view(request):
 
 
 # PRODUCTS
-def hotdrinks_view(request):
-    products = Product.objects.filter(Vertical="Hot Drink")
-    context = {'products':products}
-    return render(request, 'Hot_Drink.html', context)
+#def hotdrinks_view(request):
+    #products = Product.objects.filter(Vertical="Hot Drink")
+    #context = {'products':products}
+    #return render(request, 'Hot_Drink.html', context)
+
+# views.py
+
+
+def products_page_view(request):
+    vertical = request.GET.get('vertical', 'All')
+
+    if vertical == 'All':
+        products = Product.objects.all()
+    else:
+        products = Product.objects.filter(Vertical=vertical)
+
+    context = {
+        'vertical': vertical,
+        'products': products,
+        'vertical_choices': Product.VERTICAL_CHOICES,
+    }
+    return render(request, 'products_page.html', context)
+
+def products_page_view(request):
+    vertical = request.GET.get('vertical', 'All')
+    if vertical == 'All':
+        products = Product.objects.all()
+    else:
+        products = Product.objects.filter(Vertical=vertical)
+
+    cart = request.session.get('cart', {})
+
+    context = {
+        'products': products,
+        'vertical': vertical,
+        'vertical_choices': Product.VERTICAL_CHOICES,
+        'cart': cart
+    }
+
+    return render(request, 'products_page.html', context)
+def add_to_cart(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    quantity = int(request.POST.get('quantity', 1))  # Get the new quantity from the form
+
+    cart = request.session.get('cart', {})
+
+    if quantity > 0:
+        cart[str(product_id)] = quantity  # Set the exact quantity
+    else:
+        if str(product_id) in cart:
+            del cart[str(product_id)]  # Remove item from cart if quantity is 0 or less
+
+    request.session['cart'] = cart  # Save the updated cart in session
+
+    return redirect('products')
+
+
+def cart_view(request):
+    cart = request.session.get('cart', {})
+    products_in_cart = []
+    total_price = 0
+
+    for product_id, quantity in cart.items():
+        product = get_object_or_404(Product, id=product_id)
+        products_in_cart.append({
+            'product': product,
+            'quantity': quantity,
+            'total': product.Price * quantity
+        })
+        total_price += product.Price * quantity
+
+    context = {
+        'products_in_cart': products_in_cart,
+        'total_price': total_price
+    }
+    
+    return render(request, 'cart_page.html', context)
+
+
+def update_cart(request, product_id):
+    if request.method == 'POST':
+        cart = request.session.get('cart', {})
+        quantity = int(request.POST.get('quantity', 1))
+
+        if quantity > 0:
+            cart[str(product_id)] = quantity
+        else:
+            if str(product_id) in cart:
+                del cart[str(product_id)]
+
+        request.session['cart'] = cart
+
+    return redirect('cart')
+
+def remove_from_cart(request, product_id):
+    if request.method == 'POST':
+        cart = request.session.get('cart', {})
+
+        if str(product_id) in cart:
+            del cart[str(product_id)]
+
+        request.session['cart'] = cart
+
+    return redirect('cart')
