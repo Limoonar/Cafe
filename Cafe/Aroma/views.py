@@ -304,3 +304,10 @@ def remove_from_cart(request, product_id):
         request.session['cart'] = cart
 
     return redirect('cart')
+
+def update_pickup_type(request):
+    if request.method == 'POST':
+        pickup_type = request.POST.get('pickup_type', 'take_away')  # Default to take away if not specified
+        request.session['pickup_type'] = pickup_type
+
+    return redirect('cart')
