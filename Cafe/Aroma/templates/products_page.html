@@ -1,7 +1,9 @@
-{% load static %}
+<!-- products_page.html -->
 {% load custom_filters %}
 
 <!DOCTYPE html>
+{% load static %}
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -26,7 +28,7 @@
                     <a class="nav-link" href="#"><i class="fas fa-receipt"></i> Purchase Records</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/cart/"><i class="fas fa-shopping-cart"></i> Cart</a>
+                    <a class="nav-link" href="{% url 'cart'%}"><i class="fas fa-shopping-cart"></i> Cart</a>
                 </li>
                 {% if request.session.username %}
                 <li class="nav-item">
@@ -65,8 +67,9 @@
                                 {% csrf_token %}
                                 <div class="form-group">
                                     <label for="quantity">Quantity:</label>
-                                    <input type="number" name="quantity" min="0" value="{{ cart|get_item:product.id|default_if_none:1 }}" class="form-control" id="quantity">
+                                    <input type="number" name="quantity" min="1" value="{{ request.session.cart|get_item:product.id }}" class="form-control" id="quantity">
                                 </div>
+                                <input type="hidden" name="vertical" value="{{ vertical }}">
                                 <button type="submit" class="btn btn-primary">Update Cart</button>
                             </form>
                         </div>
