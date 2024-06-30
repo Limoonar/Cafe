@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 {% load static %}
 {% load custom_filters %}
+<!-- cart_page.html -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -44,21 +45,8 @@
 
     <div class="container mt-5">
         <h2>Shopping Cart</h2>
-
-        <!-- Pickup Type Choice -->
-        <form id="pickup_type_form" method="POST" action="{% url 'update_pickup_type' %}" class="mb-3">
-            {% csrf_token %}
-            <label for="pickup_type">Select Pickup Type:</label>
-            <select name="pickup_type" id="pickup_type" class="form-control">
-                <option value="take_away" {% if request.session.pickup_type == 'take_away' %}selected{% endif %}>Take Away</option>
-                <option value="in_person" {% if request.session.pickup_type == 'in_person' %}selected{% endif %}>In Person</option>
-            </select>
-        </form>
-
         {% if products_in_cart %}
-            <!-- Display Cart Items -->
             <table class="table table-striped">
-                <!-- Table headers -->
                 <thead>
                     <tr>
                         <th>Product</th>
@@ -71,13 +59,12 @@
                 <tbody>
                     {% for item in products_in_cart %}
                     <tr>
-                        <!-- Display each product details -->
                         <td>{{ item.product.Name }}</td>
                         <td>
-                            <form method="POST" action="{% url 'update_cart' item.product.id %}" class="quantity-form">
+                            <form method="POST" action="{% url 'update_cart' item.product.id %}">
                                 {% csrf_token %}
-                                <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="form-control quantity-input">
-                                <input type="hidden" name="product_id" value="{{ item.product.id }}">
+                                <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="form-control">
+                                <button type="submit" class="btn btn-link">Update</button>
                             </form>
                         </td>
                         <td>${{ item.product.Price }}</td>
@@ -91,7 +78,6 @@
                     </tr>
                     {% endfor %}
                 </tbody>
-                <!-- Table footer with total -->
                 <tfoot>
                     <tr>
                         <th colspan="3">Total</th>
@@ -100,25 +86,24 @@
                     </tr>
                 </tfoot>
             </table>
+
+            <!-- Finalize Purchase Button -->
+            <form method="POST" action="{% url 'finalize_purchase' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="order-type">Order Type:</label>
+                    <select name="order_type" class="form-control" id="order-type" required>
+                        <option value="1">Take Away</option>
+                        <option value="2">In Person</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-success btn-lg" onclick="return confirm('Are you sure you want to finalize the purchase?');">Finalize Purchase</button>
+            </form>
         {% else %}
             <p>Your cart is empty.</p>
             <a href="{% url 'products' %}" class="btn btn-primary">Continue Shopping</a>
         {% endif %}
     </div>
-
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const quantityForms = document.querySelectorAll('.quantity-form');
-
-        quantityForms.forEach(form => {
-            const quantityInput = form.querySelector('.quantity-input');
-
-            quantityInput.addEventListener('change', function() {
-                form.submit();
-            });
-        });
-    });
-    </script>
 
     <footer class="mt-5 py-4 text-center" style="background-color: #582f0e; color: #fff;">
         <div class="container">

@@ -23,7 +23,9 @@ urlpatterns = [
     path('cart/', views.cart_view, name='cart'),
     path('update-cart/<int:product_id>/', views.update_cart, name='update_cart'),
     path('remove-from-cart/<int:product_id>/', views.remove_from_cart, name='remove_from_cart'),
-    path('update_pickup_type/', views.update_pickup_type, name='update_pickup_type'),
+    #path('update_pickup_type/', views.update_pickup_type, name='update_pickup_type'),
+    path('finalize-purchase/', views.finalize_purchase, name='finalize_purchase'),
+    path('thank-you/', views.render, {'template_name': 'thank_you.html'}, name='thank_you'),
 
     # Other URLs for your views
 ]

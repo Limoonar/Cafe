@@ -305,9 +305,50 @@ def remove_from_cart(request, product_id):
 
     return redirect('cart')
 
-def update_pickup_type(request):
+'''def update_pickup_type(request):
     if request.method == 'POST':
         pickup_type = request.POST.get('pickup_type', 'take_away')  # Default to take away if not specified
         request.session['pickup_type'] = pickup_type
+
+    return redirect('cart')'''
+
+
+def finalize_purchase(request):
+    if request.method == 'POST':
+        # Retrieve cart from session
+        cart = request.session.get('cart', {})
+        
+        if not cart:
+            return redirect('cart')  # Redirect to cart if it's empty
+        
+        # Retrieve the logged-in user from session
+        username = request.session.get('username')
+        if not username:
+            return redirect('login')  # Redirect to login if not logged in
+
+        user = get_object_or_404(Users, Username=username)
+        
+        # Calculate total purchase amount
+        total_amount = 0
+        for product_id, quantity in cart.items():
+            product = get_object_or_404(Product, id=product_id)
+            total_amount += product.Price * quantity
+
+        # Get the selected order type
+        order_type = int(request.POST.get('order_type', 1))  # Default to 'Take Away' if not provided
+
+        # Create an order
+        order = Orders.objects.create(Purchase_amount=total_amount, Type=order_type)
+        order.Username.add(user)
+        
+        # Add products to the order
+        for product_id, quantity in cart.items():
+            product = get_object_or_404(Product, id=product_id)
+            order.Products.add(product)
+        
+        # Clear the cart
+        request.session['cart'] = {}
+
+        return redirect('thank_you')
 
     return redirect('cart')
