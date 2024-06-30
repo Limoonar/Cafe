@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -151,18 +152,18 @@
 <body>
     <div class="sidebar">
         <a href="#vault-management">
-            <img src="C:\Users\Azar\Documents\GitHub\Cafe\Cafe\Aroma\static\images\home icon.png" alt="Vault Icon" class="sidebar-img"> Vault Management
+            <img src="{% static 'images/home icon.png' %}" alt="Vault Icon" class="sidebar-img"> Vault Management
         </a>
         <a href="#add-product" class="active"> <!-- Added class "active" to highlight -->
-            <img src="C:\Users\Azar\Documents\GitHub\Cafe\Cafe\Aroma\static\images\plus icon.png" alt="Add Icon" class="sidebar-img"> Add Product
+            <img src="{% static 'images/plus icon.png' %}" alt="Add Icon" class="sidebar-img"> Add Product
         </a>
         <a href="#logout">
-            <img src="C:\Users\Azar\Documents\GitHub\Cafe\Cafe\Aroma\static\images\logout icon.png" alt="Logout Icon" class="sidebar-img"> Log Out of Admin
+            <img src="{% static 'images/logout icon.png' %}" alt="Logout Icon" class="sidebar-img"> Log Out of Admin
         </a>
     </div>
     <!-- Logo container outside sidebar, positioned at top-right of the page -->
     <div class="logo-container">
-        <img src="C:\Users\Azar\Documents\GitHub\Cafe\images\Aroma logo.png" alt="Your Logo">
+        <img src="{% static 'images/logo2.png' %}" alt="Your Logo">
     </div>
     <div class="container">
         <h2 class="add-product-header">Add New Product:</h2>
@@ -198,7 +199,7 @@
         </section>
     </div>
     <div class="footer">
-        <img src="C:\Users\Azar\Documents\GitHub\Cafe\images\Group 174.png" alt="Footer Image Placeholder"> <!-- Placeholder for the footer image -->
+        <img src="{% static 'images/group 174.png' %}" alt="Footer Image Placeholder"> <!-- Placeholder for the footer image -->
         <div class="footer-icons">
             <a href="#"><i class="fab fa-instagram"></i></a>
             <a href="#"><i class="fab fa-telegram"></i></a>
