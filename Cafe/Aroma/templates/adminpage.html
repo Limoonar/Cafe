@@ -14,10 +14,11 @@
     <style>
         body {
             background-color: #F5EBE0;
-            min-height: 100vh;
+            max-height: 80vh;
+            overflow-x: hidden;
         }
         .container-fluid {
-            margin-top: 60px;
+            margin-top: 100px;
             margin-left: 350px;
         }
         .row {
@@ -34,15 +35,15 @@
             color: #582f0e;
         }
         .main-content {
-        padding: 20px;
-        background-color: #fffcf2;
-        border-radius: 10px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        transition: margin-left 0.3s;
-        margin-left: 0;
+            padding: 20px;
+            background-color: #fffcf2;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: margin-left 0.3s;
+            margin-left: 0;
     }
         .chart-container {
             position: relative;
@@ -84,9 +85,10 @@
             display: none;
             position: fixed;
             left: 0;
+            top: 0;
             width: 220px;
             height: 100%;
-            background-color: #DAB49D;
+            background-color: #D6CCC2;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
             padding-top: 20px;
             z-index: 1050;
@@ -149,7 +151,7 @@
         <a href="adminpage" id="admin-link">Admin Menu</a>
         <a href="inventory_management" id="stock-link">Inventory Management</a>
         <a href="add_products" id="add-product-link">Add Product</a>
-        <a href="#" id="dashboard-link">Dashboard</a>
+        <a href="adminpage" id="dashboard-link">Dashboard</a>
     </div>
 
     <div class="container-fluid">
@@ -188,8 +190,8 @@
             labels: ['Product A', 'Product B', 'Product C', 'Product D', 'Product E'],
             datasets: [{
                 label: 'Sales',
-                backgroundColor: '#5E3023',
-                borderColor: '#5E3023',
+                backgroundColor: '#DAB49D',
+                borderColor: '#DAB49D',
                 data: [65, 59, 80, 81, 56],
                 borderWidth: 1
             }]
