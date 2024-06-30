@@ -240,21 +240,22 @@ def products_page_view(request):
     }
 
     return render(request, 'products_page.html', context)
+    
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-    quantity = int(request.POST.get('quantity', 1))  # Get the new quantity from the form
+    quantity = int(request.POST.get('quantity', 1))
+    vertical = request.POST.get('vertical', 'All')  # Get the current category from the request
 
     cart = request.session.get('cart', {})
 
-    if quantity > 0:
-        cart[str(product_id)] = quantity  # Set the exact quantity
-    else:
-        if str(product_id) in cart:
-            del cart[str(product_id)]  # Remove item from cart if quantity is 0 or less
+    # Update the quantity of the product in the cart
+    cart[str(product_id)] = quantity
 
-    request.session['cart'] = cart  # Save the updated cart in session
+    # Save the updated cart back to the session
+    request.session['cart'] = cart
 
-    return redirect('products')
+    # Redirect to the products page with the current category
+    return redirect(f'/products/?vertical={vertical}')
 
 
 def cart_view(request):
