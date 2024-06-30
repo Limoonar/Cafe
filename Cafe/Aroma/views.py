@@ -353,3 +353,11 @@ def finalize_purchase(request):
         return redirect('thank_you')
 
     return redirect('cart')
+
+def order_history(request):
+    username = request.session.get('username')
+    orders = Orders.objects.filter(Username=username).prefetch_related('Products')
+    context = {
+        'orders': orders
+    }
+    return render(request, 'order_history.html', context)

@@ -26,6 +26,7 @@ urlpatterns = [
     #path('update_pickup_type/', views.update_pickup_type, name='update_pickup_type'),
     path('finalize-purchase/', views.finalize_purchase, name='finalize_purchase'),
     path('thank-you/', views.render, {'template_name': 'thank_you.html'}, name='thank_you'),
+    path('order_history/', views.order_history, name='order_history'),
 
     # Other URLs for your views
 ]
