@@ -72,6 +72,39 @@
         .navbar-custom .nav-link {
             color: rgb(255, 255, 255);
         }
+        .vertical-menu {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 220px;
+            height: 100%;
+            background-color: #D6CCC2;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            padding-top: 20px;
+            z-index: 1050;
+        }
+        .vertical-menu a {
+            padding: 12px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #000;
+            display: block;
+            border-bottom: 1px solid #ccc;
+            background-color: #F4F3EE;
+            margin: 5px;
+            border-radius: 10px;
+        }
+        .vertical-menu a:first-child {
+            font-weight: bold;
+            background-color: transparent;
+            border: none;
+            margin: 0;
+            border-radius: 10px;
+        }
+        .vertical-menu a:hover {
+            background-color: #ddd;
+        }        
     </style>    
 </head>
 <body>
@@ -96,6 +129,13 @@
             </ul>
         </div>
     </nav>
+    <!-- Vertical Menu -->
+    <div id="vertical-menu" class="vertical-menu">
+        <a href="adminpage" id="admin-link">Admin Menu</a>
+        <a href="inventory_management" id="stock-link">Inventory Management</a>
+        <a href="add_products" id="add-product-link">Add Product</a>
+        <a href="adminpage" id="dashboard-link">Dashboard</a>
+    </div>    
     <div class="container mt-5 main-content">
         <h1 class="text-center" style="color: #582f0e; font-weight: 700;">Inventory Management</h1>
         <div class="card">
@@ -126,5 +166,11 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('menu-icon').addEventListener('click', function() {
+            const verticalMenu = document.getElementById('vertical-menu');
+            verticalMenu.style.display = verticalMenu.style.display === 'block' ? 'none' : 'block';
+        });
+    </script>
 </body>
 </html>
