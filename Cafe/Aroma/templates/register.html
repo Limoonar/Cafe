@@ -5,21 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
-
-    <!-- Add Bootstrap CSS for better styling -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- Add Font Awesome CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         body {
             background: url('{% static "images/Register_Background3.jpg" %}') no-repeat center center fixed;
             background-size: cover;
-            position: relative; /* Ensure body is relatively positioned for absolute positioning */
-            min-height: 135vh; /* Ensure body fills the viewport */
+            position: relative;
+            min-height: 200vh;
         }
 
         .card {
-            background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent white background for the form */
+            background-color: rgba(255, 255, 255, 0.8);
             border-radius: 10px;
         }
 
@@ -30,12 +27,12 @@
 
         .footer {
             position: absolute;
-            bottom: 15px; /* Adjust as needed */
+            bottom: 15px;
             width: 100%;
             text-align: center;
-            color: #F4F3EE; /* Text color */
-            font-size: 24px; /* Larger font size */
-            font-weight: bold; /* Bold text */
+            color: #F4F3EE;
+            font-size: 24px;
+            font-weight: bold;
         }
         header {
             position: relative;
@@ -43,22 +40,22 @@
             width: 100%;
             padding: 10px;
             margin-left: 20px;
-            font-size: 24px; /* Larger font size */
-            font-weight: bold;   
-            color: #582f0e;         
+            font-size: 24px;
+            font-weight: bold;
+            color: #582f0e;
         }
         .footer a {
-            color: #F4F3EE; /* Ensure link color is white */
-            text-decoration: none; /* Remove underline */
+            color: #F4F3EE;
+            text-decoration: none;
         }
         header a {
-            color: #582f0e; /* Ensure link color is white */
-            text-decoration: none; /* Remove underline */
+            color: #582f0e;
+            text-decoration: none;
         }
         header a:hover, .footer a:hover {
-            text-decoration: underline; /* Underline on hover */
+            text-decoration: underline;
         }
-        .card-header{
+        .card-header {
             text-align: center;
             font-size: 24px;
             font-weight: bold;
@@ -67,7 +64,7 @@
 </head>
 <body>
     <header>
-        <a href="{% url 'index' %}"> <img src="{% static 'images/logo2.png' %}" alt="Aroma Cafe Logo" style="height: 60px;"> </a>
+        <a href="{% url 'index' %}"> <img src="{% static 'images/logo2.png' %}" alt="Aroma Cafe Logo" style="height: 80px;"> </a>
     </header>
     <div class="container mt-5">
         <div class="row justify-content-center">
@@ -77,36 +74,11 @@
                     <div class="card-body">
                         <form method="POST" action="{% url 'register' %}">
                             {% csrf_token %}
-                            <div class="form-group">
-                                <label for="first_name">First Name</label>
-                                <input type="text" id="first_name" name="first_name" class="form-control" required autofocus>
-                            </div>
-                            <div class="form-group">
-                                <label for="last_name">Last Name</label>
-                                <input type="text" id="last_name" name="last_name" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="username">Username</label>
-                                <input type="text" id="username" name="username" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" id="email" name="email" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="password">Password</label>
-                                <input type="password" id="password" name="password" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="phone_number">Phone Number</label>
-                                <input type="text" id="phone_number" name="phone_number" class="form-control" required>
-                            </div>
+                            {{ form.as_p }}
                             <div class="center-register-btn">
                                 <button type="submit" class="btn btn-primary">Register</button>
                             </div>
                         </form>
-
-                        <!-- Login link -->
                         <div class="mt-3">
                             <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
                         </div>
@@ -115,8 +87,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Footer with Social Media Icons -->
     <footer class="footer mt-5 py-4 text-center" style=" color: #fff;">
         <div class="container">
             <p>&copy; 2024 <a href="{% url 'index' %}">Aroma Cafe</a></p>
@@ -126,10 +96,6 @@
             <a href="#" class="text-white mx-2"><i class="fab fa-youtube"></i></a>
         </div>
     </footer>
-
-    <!-- Add your JS links here -->
-
-    <!-- Add jQuery and Bootstrap JS for better functionality -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
