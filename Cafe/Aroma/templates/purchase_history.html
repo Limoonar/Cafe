@@ -77,15 +77,14 @@
             margin-top: auto;
         }
         .footer-icons {
-            margin-top: 0px;
+            margin-top: 10px; /* Add some margin to separate icons from text */
             font-size: 24px;
         }
-        .footer-icons a {
+        .footer-icons i {
             color: #333;
-            text-decoration: none;
-            margin: 0 0px;
+            margin: 0 10px; /* Add margin between icons */
         }
-        .footer-icons a:hover {
+        .footer-icons i:hover {
             color: #000;
         }
         .logo-container {
@@ -102,16 +101,20 @@
             height: auto;
             margin-bottom: 1px; /* Space between image and text */
         }
+        
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+        } 
     </style>
 </head>
 <body>
     <div class="header">
         <a href="#" class="home-link">
-            <img src="C:\Users\Azar\Documents\GitHub\Cafe\images\25694.png" alt="Home" class="home-image"> Home
+            <img src="C:\Users\Azar\Documents\GitHub\Cafe\staticfiles\images\25694.png" alt="Home" class="home-image"> Home
         </a>
         <!-- Placeholder for your logo -->
         <div class="logo-container">
-            <img src="C:\Users\Azar\Documents\GitHub\Cafe\images\Aroma logo.png" alt="Your Logo">
+            <img src="C:\Users\Azar\Documents\GitHub\Cafe\staticfiles\images\20240627_233713.png" alt="Your Logo">
         </div>
     </div>
     <div class="container">
@@ -120,37 +123,37 @@
             <thead>
                 <tr>
                     <th>Order Number</th>
-                    <th>Type</th>
-                    <th>Products</th>
+                    <th>Date</th>
+                    <th>Time</th>
                     <th>Total Price Paid</th>
                 </tr>
             </thead>
             <tbody>
-                {% for order in orders %}
+                <!-- Replace with dynamic data or use JavaScript to populate -->
                 <tr>
-                    <td>{{ order.OrderID }}</td>
-                    <td>{{ order.Type }}</td>
-                    <td>
-                        {% for product in order.Products.all %}
-                            {{ product.name }}{% if not forloop.last %}, {% endif %}
-                        {% endfor %}
-                    </td>
-                    <td>${{ order.Purchase_amount }}</td>
+                    <td>1</td>
+                    <td>2024-06-28</td>
+                    <td>14:30</td>
+                    <td>$25.00</td>
                 </tr>
-                {% endfor %}
+                <tr>
+                    <td>2</td>
+                    <td>2024-06-29</td>
+                    <td>10:15</td>
+                    <td>$32.50</td>
+                </tr>
+                <!-- Add more rows as needed -->
             </tbody>
         </table>
     </div>
     <div class="footer">
-        <img src="C:\Users\Azar\Documents\GitHub\Cafe\images\Group 174.png" alt="Footer Image Placeholder"> <!-- Placeholder for the footer image -->
         <div class="footer-icons">
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-telegram"></i></a>
-            <a href="#"><i class="fab fa-facebook"></i></a>
-            <a href="#"><i class="fab fa-youtube"></i></a>
+            <i class="fab fa-youtube"></i>
+            <i class="fab fa-instagram"></i>
+            <i class="fab fa-facebook"></i>
+            <i class="fab fa-telegram"></i>
         </div>
         <p>&copy; 2024 Aroma Cafe</p>
     </div>
 </body>
 </html>
-

@@ -106,7 +106,7 @@
 </head>
 <body>
     <div class="header">
-        <a href="#" class="home-link">
+        <a href="{% url 'index' %}" class="home-link">
             <img src="C:\Users\Azar\Documents\GitHub\Cafe\images\25694.png" alt="Home" class="home-image"> Home
         </a>
         <!-- Placeholder for your logo -->
@@ -132,7 +132,7 @@
                     <td>{{ order.Type }}</td>
                     <td>
                         {% for product in order.Products.all %}
-                            {{ product.name }}{% if not forloop.last %}, {% endif %}
+                            {{ product.Name }}{% if not forloop.last %}, {% endif %}
                         {% endfor %}
                     </td>
                     <td>${{ order.Purchase_amount }}</td>
