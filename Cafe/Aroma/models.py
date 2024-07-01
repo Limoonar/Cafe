@@ -40,11 +40,6 @@ class Product(models.Model):
     Chocolate = models.IntegerField(max_length=10)
     Price = models.IntegerField(max_length=10)
     Vertical = models.CharField(max_length=10, choices=VERTICAL_CHOICES)
-    image_url = models.URLField(max_length=200, blank=False, default='')
-
-    def __str__(self):
-        return self.Name
-
 
 class Orders(models.Model):
     CHOICES = [
