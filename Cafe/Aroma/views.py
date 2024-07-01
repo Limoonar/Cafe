@@ -42,7 +42,7 @@ def login_view(request):
             # If user exists, check password
             if user:
                 # Manually compare hashed password
-                if password == user.Password:
+                if password == user.Password or check_password(password, user.Password):
                     request.session['username'] = user.Username
                     return redirect('index')
                     # global phone, random_code
