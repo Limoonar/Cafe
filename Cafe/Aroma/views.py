@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from .models import *
 from django.contrib.auth import authenticate, login
 from .forms import *
-from .models import Users, Orders, Product
+from .models import Users, Orders
 from django.contrib.auth.hashers import check_password
 import ghasedakpack
 from numpy.random import randint
@@ -42,9 +42,8 @@ def login_view(request):
             # If user exists, check password
             if user:
                 # Manually compare hashed password
-                if password == user.Password:
+                if password == user.Password or check_password(password, user.Password):
                     request.session['username'] = user.Username
-                    request.session['cart']= {}
                     return redirect('index')
                     # global phone, random_code
                     # random_code = randint(1000, 9999)
@@ -200,156 +199,7 @@ def purchase_view(request):
 
 
 # PRODUCTS
-#def hotdrinks_view(request):
-    #products = Product.objects.filter(Vertical="Hot Drink")
-    #context = {'products':products}
-    #return render(request, 'Hot_Drink.html', context)
-
-# views.py
-
-
-def products_page_view(request):
-    vertical = request.GET.get('vertical', 'All')
-
-    if vertical == 'All':
-        products = Product.objects.all()
-    else:
-        products = Product.objects.filter(Vertical=vertical)
-
-    context = {
-        'vertical': vertical,
-        'products': products,
-        'vertical_choices': Product.VERTICAL_CHOICES,
-    }
-    return render(request, 'products_page.html', context)
-
-def products_page_view(request):
-    vertical = request.GET.get('vertical', 'All')
-    if vertical == 'All':
-        products = Product.objects.all()
-    else:
-        products = Product.objects.filter(Vertical=vertical)
-
-    cart = request.session.get('cart', {})
-
-    context = {
-        'products': products,
-        'vertical': vertical,
-        'vertical_choices': Product.VERTICAL_CHOICES,
-        'cart': cart
-    }
-
-    return render(request, 'products_page.html', context)
-    
-def add_to_cart(request, product_id):
-    product = get_object_or_404(Product, id=product_id)
-    quantity = int(request.POST.get('quantity', 1))
-    vertical = request.POST.get('vertical', 'All')  # Get the current category from the request
-
-    cart = request.session.get('cart', {})
-
-    # Update the quantity of the product in the cart
-    cart[str(product_id)] = quantity
-
-    # Save the updated cart back to the session
-    request.session['cart'] = cart
-
-    # Redirect to the products page with the current category
-    return redirect(f'/products/?vertical={vertical}')
-
-
-def cart_view(request):
-    cart = request.session.get('cart', {})
-    products_in_cart = []
-    total_price = 0
-
-    for product_id, quantity in cart.items():
-        product = get_object_or_404(Product, id=product_id)
-        products_in_cart.append({
-            'product': product,
-            'quantity': quantity,
-            'total': product.Price * quantity
-        })
-        total_price += product.Price * quantity
-
-    context = {
-        'products_in_cart': products_in_cart,
-        'total_price': total_price
-    }
-    
-    return render(request, 'cart_page.html', context)
-
-
-def update_cart(request, product_id):
-    if request.method == 'POST':
-        cart = request.session.get('cart', {})
-        quantity = int(request.POST.get('quantity', 1))
-
-        if quantity > 0:
-            cart[str(product_id)] = quantity
-        else:
-            if str(product_id) in cart:
-                del cart[str(product_id)]
-
-        request.session['cart'] = cart
-
-    return redirect('cart')
-
-def remove_from_cart(request, product_id):
-    if request.method == 'POST':
-        cart = request.session.get('cart', {})
-
-        if str(product_id) in cart:
-            del cart[str(product_id)]
-
-        request.session['cart'] = cart
-
-    return redirect('cart')
-
-'''def update_pickup_type(request):
-    if request.method == 'POST':
-        pickup_type = request.POST.get('pickup_type', 'take_away')  # Default to take away if not specified
-        request.session['pickup_type'] = pickup_type
-
-    return redirect('cart')'''
-
-
-def finalize_purchase(request):
-    if request.method == 'POST':
-        # Retrieve cart from session
-        cart = request.session.get('cart', {})
-        
-        if not cart:
-            return redirect('cart')  # Redirect to cart if it's empty
-        
-        # Retrieve the logged-in user from session
-        username = request.session.get('username')
-        if not username:
-            return redirect('login')  # Redirect to login if not logged in
-
-        user = get_object_or_404(Users, Username=username)
-        
-        # Calculate total purchase amount
-        total_amount = 0
-        for product_id, quantity in cart.items():
-            product = get_object_or_404(Product, id=product_id)
-            total_amount += product.Price * quantity
-
-        # Get the selected order type
-        order_type = int(request.POST.get('order_type', 1))  # Default to 'Take Away' if not provided
-
-        # Create an order
-        order = Orders.objects.create(Purchase_amount=total_amount, Type=order_type)
-        order.Username.add(user)
-        
-        # Add products to the order
-        for product_id, quantity in cart.items():
-            product = get_object_or_404(Product, id=product_id)
-            order.Products.add(product)
-        
-        # Clear the cart
-        request.session['cart'] = {}
-
-        return redirect('thank_you')
-
-    return redirect('cart')
+def hotdrinks_view(request):
+    products = Product.objects.filter(Vertical="Hot Drink")
+    context = {'products':products}
+    return render(request, 'Hot_Drink.html', context)
