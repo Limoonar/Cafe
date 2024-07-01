@@ -24,16 +24,6 @@
         .row {
             min-height: 80vh;
         }
-        .sidebar {
-            background-color: #F4F3EE;
-            color: #582f0e;
-            padding: 20px;
-            border-radius: 10px;
-            width: 250px;
-        }
-        .sidebar a {
-            color: #582f0e;
-        }
         .main-content {
             padding: 20px;
             background-color: #fffcf2;
@@ -127,12 +117,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#" id="menu-icon"><i class="fas fa-bars"></i> Admin Menu</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fas fa-receipt"></i> Purchase Records</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fas fa-shopping-cart"></i> Cart</a>
-                </li>
                 {% if request.session.username %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
@@ -158,7 +142,7 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="main-content" id="dashboard">
-                    <h2>Sales Chart</h2>
+                    <h2 style="color: #582f0e; font-weight: 400; text-align: center;">Sales Chart</h2>
                     <div class="chart-container">
                         <canvas id="salesChart"></canvas>
                     </div>
