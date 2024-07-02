@@ -8,6 +8,7 @@ import ghasedakpack
 from numpy.random import randint
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden, HttpResponse
+from django.contrib import messages
 
 sms = ghasedakpack.Ghasedak("a26658f51d8f300e354cf8d137bca49aab329de737a80c80f507fb883b2ffeba")
 
@@ -208,7 +209,7 @@ def purchase_view(request):
 # views.py
 
 
-def products_page_view(request):
+'''def products_page_view(request):
     vertical = request.GET.get('vertical', 'All')
 
     if vertical == 'All':
@@ -221,7 +222,7 @@ def products_page_view(request):
         'products': products,
         'vertical_choices': Product.VERTICAL_CHOICES,
     }
-    return render(request, 'products_page.html', context)
+    return render(request, 'products_page.html', context)'''
 
 def products_page_view(request):
     vertical = request.GET.get('vertical', 'All')
@@ -230,32 +231,52 @@ def products_page_view(request):
     else:
         products = Product.objects.filter(Vertical=vertical)
 
-    cart = request.session.get('cart', {})
+    # Get the latest storage record
+    try:
+        storage = Storage.objects.latest('id')
+    except Storage.DoesNotExist:
+        # Handle the case where no storage record exists
+        storage = None
 
-    context = {
+    return render(request, 'products_page.html', {
         'products': products,
         'vertical': vertical,
         'vertical_choices': Product.VERTICAL_CHOICES,
-        'cart': cart
-    }
-
-    return render(request, 'products_page.html', context)
+        'storage': storage  # Pass the storage to the template
+    })
     
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     quantity = int(request.POST.get('quantity', 1))
-    vertical = request.POST.get('vertical', 'All')  # Get the current category from the request
+    vertical = request.POST.get('vertical', 'All')
 
     cart = request.session.get('cart', {})
 
-    # Update the quantity of the product in the cart
-    cart[str(product_id)] = quantity
+    # Check if sufficient inventory exists
+    storage = Storage.objects.latest('id')
+    if (storage.sugar >= product.Sugar * quantity and
+        storage.flour >= product.Flour * quantity and
+        storage.coffee >= product.Coffee * quantity and
+        storage.chocolate >= product.Chocolate * quantity):
+        
+        # If item already in cart, restore previous quantity before updating
+        if str(product_id) in cart:
+            previous_quantity = cart[str(product_id)]
+            storage.revert_inventory(product, previous_quantity)
+        
+        # Update cart and reduce inventory
+        cart[str(product_id)] = quantity
+        storage.update_inventory(product, quantity)
+        storage.save()
 
-    # Save the updated cart back to the session
-    request.session['cart'] = cart
+        request.session['cart'] = cart
+    else:
+        # Handle insufficient inventory scenario
+        messages.error(request, f"Insufficient ingredients to add {product.Name} to the cart.")
 
-    # Redirect to the products page with the current category
     return redirect(f'/products/?vertical={vertical}')
+
+
 
 
 def cart_view(request):
@@ -283,76 +304,106 @@ def cart_view(request):
 def update_cart(request, product_id):
     if request.method == 'POST':
         cart = request.session.get('cart', {})
-        quantity = int(request.POST.get('quantity', 1))
+        new_quantity = int(request.POST.get('quantity', 1))
+        product = get_object_or_404(Product, id=product_id)
 
-        if quantity > 0:
-            cart[str(product_id)] = quantity
-        else:
-            if str(product_id) in cart:
-                del cart[str(product_id)]
+        if str(product_id) in cart:
+            current_quantity = cart[str(product_id)]
+            storage = Storage.objects.latest('id')
+
+            # Revert inventory for the current quantity
+            storage.revert_inventory(product, current_quantity)
+            storage.save()
+
+            # Check if sufficient inventory exists for the new quantity
+            if (storage.sugar >= product.Sugar * new_quantity and
+                storage.flour >= product.Flour * new_quantity and
+                storage.coffee >= product.Coffee * new_quantity and
+                storage.chocolate >= product.Chocolate * new_quantity):
+                
+                # Update the cart and reduce inventory
+                cart[str(product_id)] = new_quantity
+                storage.update_inventory(product, new_quantity)
+                storage.save()
+            else:
+                # Restore original inventory and raise error
+                storage.update_inventory(product, current_quantity)
+                storage.save()
+                messages.error(request, f"Insufficient ingredients to update {product.Name} quantity to {new_quantity}.")
 
         request.session['cart'] = cart
 
     return redirect('cart')
 
+
 def remove_from_cart(request, product_id):
     if request.method == 'POST':
         cart = request.session.get('cart', {})
-
+        
         if str(product_id) in cart:
+            product = get_object_or_404(Product, id=product_id)
+            quantity = cart[str(product_id)]
+            
+            # Revert inventory
+            storage = Storage.objects.latest('id')
+            storage.revert_inventory(product, quantity)
+            storage.save()
+            
+            # Remove from cart
             del cart[str(product_id)]
 
         request.session['cart'] = cart
 
     return redirect('cart')
 
-'''def update_pickup_type(request):
-    if request.method == 'POST':
-        pickup_type = request.POST.get('pickup_type', 'take_away')  # Default to take away if not specified
-        request.session['pickup_type'] = pickup_type
-
-    return redirect('cart')'''
 
 
 def finalize_purchase(request):
     if request.method == 'POST':
-        # Retrieve cart from session
         cart = request.session.get('cart', {})
         
         if not cart:
-            return redirect('cart')  # Redirect to cart if it's empty
+            return redirect('cart')
         
-        # Retrieve the logged-in user from session
         username = request.session.get('username')
         if not username:
-            return redirect('login')  # Redirect to login if not logged in
-
-        user = get_object_or_404(Users, Username=username)
+            return redirect('login')
         
-        # Calculate total purchase amount
+        user = get_object_or_404(Users, Username=username)
         total_amount = 0
+        storage = Storage.objects.latest('id')
+        
+        # Check if sufficient inventory for all items
         for product_id, quantity in cart.items():
             product = get_object_or_404(Product, id=product_id)
+            if (storage.sugar < product.Sugar * quantity or
+                storage.flour < product.Flour * quantity or
+                storage.coffee < product.Coffee * quantity or
+                storage.chocolate < product.Chocolate * quantity):
+                messages.error(request, f"Insufficient ingredients for {product.Name}. Please adjust your cart.")
+                return redirect('cart')
             total_amount += product.Price * quantity
 
-        # Get the selected order type
-        order_type = int(request.POST.get('order_type', 1))  # Default to 'Take Away' if not provided
+        # Reduce inventory after successful check
+        for product_id, quantity in cart.items():
+            product = get_object_or_404(Product, id=product_id)
+            storage.update_inventory(product, quantity)
+        storage.save()
 
-        # Create an order
+        order_type = int(request.POST.get('order_type', 1))
         order = Orders.objects.create(Purchase_amount=total_amount, Type=order_type)
         order.Username.add(user)
         
-        # Add products to the order
         for product_id, quantity in cart.items():
             product = get_object_or_404(Product, id=product_id)
             order.Products.add(product)
         
-        # Clear the cart
         request.session['cart'] = {}
 
         return redirect('thank_you')
 
     return redirect('cart')
+
 
 def order_history(request):
     username = request.session.get('username')

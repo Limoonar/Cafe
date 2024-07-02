@@ -9,6 +9,14 @@ class Admins(models.Model):
     Password = models.CharField(max_length=255, blank= False, unique=True)
 
 
+class Users(models.Model):
+    Username = models.CharField(max_length=255, blank= False, unique=True, primary_key=True)
+    Full_name = models.CharField(max_length=255, blank= False)
+    Email = models.EmailField(max_length=255, blank= False, unique=True)
+    Password = models.CharField(max_length=255, blank=False, unique=True, default= 000000)
+    Phone_Number = models.IntegerField(max_length=11)
+
+
 class Storage(models.Model):
     id = models.AutoField(unique=True, primary_key=True)
     date = models.DateTimeField(default=timezone.now)
@@ -17,13 +25,18 @@ class Storage(models.Model):
     coffee = models.FloatField(blank=False, default=0)
     chocolate = models.FloatField(blank=False, default=0)
 
+    def update_inventory(self, product, quantity):
+        self.sugar -= product.Sugar * quantity
+        self.flour -= product.Flour * quantity
+        self.coffee -= product.Coffee * quantity
+        self.chocolate -= product.Chocolate * quantity
 
-class Users(models.Model):
-    Username = models.CharField(max_length=255, blank= False, unique=True, primary_key=True)
-    Full_name = models.CharField(max_length=255, blank= False)
-    Email = models.EmailField(max_length=255, blank= False, unique=True)
-    Password = models.CharField(max_length=255, blank=False, unique=True, default= 000000)
-    Phone_Number = models.IntegerField(max_length=11)
+    def revert_inventory(self, product, quantity):
+        self.sugar += product.Sugar * quantity
+        self.flour += product.Flour * quantity
+        self.coffee += product.Coffee * quantity
+        self.chocolate += product.Chocolate * quantity
+
 
 class Product(models.Model):
     VERTICAL_CHOICES = [
@@ -34,12 +47,13 @@ class Product(models.Model):
     ]
     id = models.AutoField(unique=True, primary_key=True)
     Name = models.CharField(unique=True, max_length=255)
-    Sugar = models.IntegerField(max_length=10)
-    Coffee = models.IntegerField(max_length=10)
-    Flour = models.IntegerField(max_length=10)
-    Chocolate = models.IntegerField(max_length=10)
-    Price = models.IntegerField(max_length=10)
+    Sugar = models.FloatField()
+    Coffee = models.FloatField()
+    Flour = models.FloatField()
+    Chocolate = models.FloatField()
+    Price = models.FloatField()
     Vertical = models.CharField(max_length=10, choices=VERTICAL_CHOICES)
+
 
 class Orders(models.Model):
     CHOICES = [
