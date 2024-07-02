@@ -131,11 +131,11 @@
     </nav>
     <!-- Vertical Menu -->
     <div id="vertical-menu" class="vertical-menu">
-        <a href="adminpage" id="admin-link">Admin Menu</a>
-        <a href="inventory_management" id="stock-link">Inventory Management</a>
-        <a href="add_products" id="add-product-link">Add Product</a>
-        <a href="adminpage" id="dashboard-link">Dashboard</a>
-    </div>    
+        <a>Admin Menu</a>
+        <a href="{% url 'inventory_management' %}" id="stock-link">Inventory Management</a>
+        <a href="{% url 'add_products' %}" id="add-product-link">Add Product</a>
+        <a href="{% url 'adminpage' %}"  id="dashboard-link">Dashboard</a>
+    </div>
     <div class="container mt-5 main-content">
         <h1 class="text-center" style="color: #582f0e; font-weight: 700;">Inventory Management</h1>
         <div class="card">

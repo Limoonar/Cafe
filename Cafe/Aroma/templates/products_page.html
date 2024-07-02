@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body style="background-color: #F5EBE0;">
-    <nav class="navbar navbar-expand-lg navbar-custom">
+   <nav class="navbar navbar-expand-lg navbar-custom">
         <a class="navbar-brand" href="{% url 'index' %}">
             <img src="{% static 'images/logo.png' %}" alt="Aroma Cafe Logo" style="height: 50px;">
         </a>
@@ -25,7 +25,7 @@
                     <a class="nav-link" href="#" id="menu-icon"><i class="fas fa-bars"></i> Menu</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fas fa-receipt"></i> Purchase Records</a>
+                    <a class="nav-link" href="{% url 'order_history' %}"><i class="fas fa-receipt"></i> Purchase Records</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'cart'%}"><i class="fas fa-shopping-cart"></i> Cart</a>
@@ -43,6 +43,14 @@
         </div>
     </nav>
 
+   <!-- Vertical Menu (hidden by default) -->
+    <div id="vertical-menu" class="vertical-menu">
+        <a>Menu</a>
+        <a href="{% url 'products' %}?vertical=Cold+Drink">Cold Drinks</a>
+        <a href="{% url 'products' %}?vertical=Hot+Drink">Hot Drinks</a>
+        <a href="{% url 'products' %}?vertical=Cake">Cake</a>
+        <a href="{% url 'products' %}?vertical=Food">Food</a>
+    </div>
     <!-- Products -->
     <div class="container mt-5">
         <h2>Products - {{ vertical }}</h2>
@@ -103,7 +111,13 @@
         });
     </script>  
     
+    <!-- Add your CSS for vertical menu -->
     <style>
+        .best-selling-section {
+            background-color: #D6CCC2;
+            padding: 20px;
+            border-radius: 8px;
+        }
         .vertical-menu {
             display: none;
             position: fixed;
@@ -126,15 +140,41 @@
         .vertical-menu a:hover {
             background-color: #ddd;
         }
+        .vertical-menu a {
+            padding: 12px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #000;
+            display: block;
+            border-bottom: 1px solid #ccc;
+            background-color: #F4F3EE;
+            margin: 5px;
+            border-radius: 10px;
+        }
+        .vertical-menu a:first-child {
+            font-weight: bold;
+            background-color: transparent;
+            border: none;
+            margin: 0;
+            border-radius: 10px;
+        }
         .show {
             display: block;
         }
+        .carousel {
+            max-width: 1000px;
+            padding: 15px;
+            margin: 20px auto;
+        }
+        .carousel-inner img {
+            border-radius: 20px; /* Apply rounded corners to the images inside the carousel */
+        }
         .navbar-custom {
-            background-color: #582f0e;
+            background-color: #582f0e; /* Change this to your desired color */
         }
         .navbar-custom .navbar-brand,
         .navbar-custom .nav-link {
-            color: rgb(255, 255, 255);
+            color: rgb(255, 255, 255); /* Change the text color to contrast with the background */
         }
         .navbar-toggler-icon {
             background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
@@ -161,6 +201,7 @@
 </div>
 </body>
 </html>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const form = document.getElementById('add-to-cart-form');

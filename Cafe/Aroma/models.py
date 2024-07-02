@@ -53,6 +53,11 @@ class Product(models.Model):
     Chocolate = models.FloatField()
     Price = models.FloatField()
     Vertical = models.CharField(max_length=10, choices=VERTICAL_CHOICES)
+    image_url = models.URLField(max_length=200, blank=False, default='')
+
+    def __str__(self):
+        return self.Name
+
 
 
 class Orders(models.Model):

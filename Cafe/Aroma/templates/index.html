@@ -32,7 +32,7 @@
                     <a class="nav-link" href="{% url 'order_history' %}"><i class="fas fa-receipt"></i> Purchase Records</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fas fa-shopping-cart"></i> Cart</a>
+                    <a class="nav-link" href="/cart/"><i class="fas fa-shopping-cart"></i> Cart</a>
                 </li>
                 {% if request.session.username %}
                 <li class="nav-item">
@@ -49,11 +49,11 @@
 
     <!-- Vertical Menu (hidden by default) -->
     <div id="vertical-menu" class="vertical-menu">
-        <a href="index">Menu</a>
-        <a href="#">Cold Drinks</a>
-        <a href="#">Hot Drinks</a>
-        <a href="#">Cake</a>
-        <a href="#">Food</a>
+        <a>Menu</a>
+        <a href="{% url 'products' %}?vertical=Cold+Drink">Cold Drinks</a>
+        <a href="{% url 'products' %}?vertical=Hot+Drink">Hot Drinks</a>
+        <a href="{% url 'products' %}?vertical=Cake">Cake</a>
+        <a href="{% url 'products' %}?vertical=Food">Food</a>
     </div>
 
     <!-- Slider -->

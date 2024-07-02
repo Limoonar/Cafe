@@ -120,24 +120,26 @@
             <thead>
                 <tr>
                     <th>Order Number</th>
-                    <th>Type</th>
-                    <th>Products</th>
+                    <th>Date</th>
+                    <th>Time</th>
                     <th>Total Price Paid</th>
                 </tr>
             </thead>
             <tbody>
-                {% for order in orders %}
+                <!-- Replace with dynamic data or use JavaScript to populate -->
                 <tr>
-                    <td>{{ order.OrderID }}</td>
-                    <td>{{ order.Type }}</td>
-                    <td>
-                        {% for product in order.Products.all %}
-                            {{ product.name }}{% if not forloop.last %}, {% endif %}
-                        {% endfor %}
-                    </td>
-                    <td>${{ order.Purchase_amount }}</td>
+                    <td>1</td>
+                    <td>2024-06-28</td>
+                    <td>14:30</td>
+                    <td>$25.00</td>
                 </tr>
-                {% endfor %}
+                <tr>
+                    <td>2</td>
+                    <td>2024-06-29</td>
+                    <td>10:15</td>
+                    <td>$32.50</td>
+                </tr>
+                <!-- Add more rows as needed -->
             </tbody>
         </table>
     </div>
@@ -153,4 +155,3 @@
     </div>
 </body>
 </html>
-
