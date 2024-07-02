@@ -59,19 +59,20 @@
             {% for product in products %}
                 <div class="col-md-3">
                     <div class="card">
-                        <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}">
+                        <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.Name }}">
                         <div class="card-body">
                             <h5 class="card-title">{{ product.Name }}</h5>
                             <p class="card-text">${{ product.Price }}</p>
-                            <form method="POST" action="{% url 'add_to_cart' product.id %}">
+                            <form id="add-to-cart-form" method="POST" action="{% url 'add_to_cart' product.id %}">
                                 {% csrf_token %}
                                 <div class="form-group">
                                     <label for="quantity">Quantity:</label>
-                                    <input type="number" name="quantity" min="1" value="{{ request.session.cart|get_item:product.id }}" class="form-control" id="quantity">
+                                    <input type="number" name="quantity" min="1" max="{{ product.stock_available }}" value="{{ request.session.cart|get_item:product.id }}" class="form-control" id="quantity">
                                 </div>
                                 <input type="hidden" name="vertical" value="{{ vertical }}">
-                                <button type="submit" class="btn btn-primary">Update Cart</button>
+                                <button type="submit" class="btn btn-primary" id="add-to-cart-btn">Update Cart</button>
                             </form>
+                            
                         </div>
                     </div>
                 </div>
@@ -100,8 +101,8 @@
         document.getElementById('menu-icon').addEventListener('click', function() {
             document.getElementById('vertical-menu').classList.toggle('show');
         });
-    </script>
-
+    </script>  
+    
     <style>
         .vertical-menu {
             display: none;
@@ -139,5 +140,48 @@
             background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
         }
     </style>
+    <!-- Bootstrap Modal for Add to Cart Warning -->
+<div class="modal fade" id="add-to-cart-modal" tabindex="-1" role="dialog" aria-labelledby="add-to-cart-modal-title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="add-to-cart-modal-title">Warning: Cannot Add More Items</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Sorry, you cannot add more items to your cart than what's available in stock.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('add-to-cart-form');
+        const quantityInput = document.getElementById('quantity');
+        const addToCartBtn = document.getElementById('add-to-cart-btn');
+    
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const quantity = parseInt(quantityInput.value);
+            const maxStock = parseInt(quantityInput.getAttribute('max'));
+            const currentCartQuantity = parseInt(quantityInput.getAttribute('value'));
+    
+            // Check if adding more exceeds available stock
+            if (quantity + currentCartQuantity > maxStock) {
+                // Show Bootstrap modal with warning
+                $('#add-to-cart-modal').modal('show');
+                return;
+            }
+    
+            // Submit form if validation passes
+            form.submit();
+        });
+    });
+</script>  
