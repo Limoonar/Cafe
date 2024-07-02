@@ -71,11 +71,12 @@
         </script>
     <div class="row">
         {% for product in products %}
-        <div class="product-card">
-            <img src={{ product.image_url }} alt="Product Image" style="width:10%">
-            <h3>{{ product.Name }}</h3>
-            <p>Price: ${{ product.Price }}</p>
-        </div>
+            <div class="col-md-3">
+                <div class="product-card">
+                    <h3>{{ product.Name }}</h3>
+                    <p>Price: ${{ product.Price }}</p>
+                </div>
+            </div>
         {% endfor %}
     </div>
 

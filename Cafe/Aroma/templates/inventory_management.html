@@ -1,20 +1,176 @@
 <!-- inventory_management.html -->
 
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventory Management</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            background-color: #F5EBE0;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 110vh;
+        }
+        .main-content {
+            padding: 20px;
+            background-color: #F5EBE0;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1; /* Allows the container to grow and take up space */
+        }
+        .card {
+            color: #582f0e;
+            background-color:#fffcf2;
+            margin-top: 80px;
+            width: 300px;
+        }
+        .btn {
+            background-color: #582f0e;
+            border-color: #582f0e;
+        }
+        header {
+            position: relative;
+            text-align: left;
+            padding: 5px;
+            margin-left: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #F4F3EE;         
+        }
+        header a:hover, .footer a:hover {
+            text-decoration: underline;
+        }
+        .footer {
+            width: 100%;
+            text-align: center;
+            color: #582f0e;
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 50px;
+            padding: 20px 0;
+            background-color: #F5EBE0;
+        }
+        .footer a {
+            color: #582f0e;
+            text-decoration: none;
+        }
+        .navbar-custom {
+            background-color: #582f0e;
+        }
+        .navbar-custom .navbar-brand,
+        .navbar-custom .nav-link {
+            color: rgb(255, 255, 255);
+        }
+        .vertical-menu {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 220px;
+            height: 100%;
+            background-color: #D6CCC2;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            padding-top: 20px;
+            z-index: 1050;
+        }
+        .vertical-menu a {
+            padding: 12px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #000;
+            display: block;
+            border-bottom: 1px solid #ccc;
+            background-color: #F4F3EE;
+            margin: 5px;
+            border-radius: 10px;
+        }
+        .vertical-menu a:first-child {
+            font-weight: bold;
+            background-color: transparent;
+            border: none;
+            margin: 0;
+            border-radius: 10px;
+        }
+        .vertical-menu a:hover {
+            background-color: #ddd;
+        }        
+    </style>    
 </head>
 <body>
-    <h1>Inventory Management</h1>
-    <!-- Add your inventory management content here -->
-    <p>Sugar: {{ storage.sugar }}</p>
-    <p>Flour: {{ storage.flour }}</p>
-    <p>Coffee: {{ storage.coffee }}</p>
-    <p>Chocolate: {{ storage.chocolate }}</p>
-    <a href="{% url 'inventory_update' %}">
-        <button type="submit" formmethod="POST" >Update Inventory</button>
-    </a>
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <a class="navbar-brand" href="{% url 'index' %}">
+            <img src="{% static 'images/logo.png' %}" alt="Aroma Cafe Logo" style="height: 60px;">
+        </a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" id="menu-icon"><i class="fas fa-bars"></i> Admin Menu</a>
+                </li>
+                {% if request.session.username %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}"><i class="fas fa-user"></i> Login to Account</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <!-- Vertical Menu -->
+    <div id="vertical-menu" class="vertical-menu">
+        <a>Admin Menu</a>
+        <a href="{% url 'inventory_management' %}" id="stock-link">Inventory Management</a>
+        <a href="{% url 'add_products' %}" id="add-product-link">Add Product</a>
+        <a href="{% url 'adminpage' %}"  id="dashboard-link">Dashboard</a>
+    </div>
+    <div class="container mt-5 main-content">
+        <h1 class="text-center" style="color: #582f0e; font-weight: 700;">Inventory Management</h1>
+        <div class="card">
+            <div class="card-body">
+                <p><strong>Sugar:</strong> {{ storage.sugar }}</p>
+                <hr>
+                <p><strong>Flour:</strong> {{ storage.flour }}</p>
+                <hr>
+                <p><strong>Raw Coffee:</strong> {{ storage.coffee }}</p>
+                <hr>
+                <p><strong>Chocolates:</strong> {{ storage.chocolate }}</p>
+                <hr>
+                <div class="text-center">
+                    <a href="{% url 'inventory_update' %}" class="btn btn-primary">Update Inventory</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 <a href="{% url 'index' %}">Aroma Cafe</a></p>
+            <a href="#" style="color: #582f0e;" class="mx-2"><i class="fab fa-instagram"></i></a>
+            <a href="#" style="color: #582f0e;" class="mx-2"><i class="fab fa-telegram"></i></a>
+            <a href="#" style="color: #582f0e;" class="mx-2"><i class="fab fa-facebook"></i></a>
+            <a href="#" style="color: #582f0e;" class="mx-2"><i class="fab fa-youtube"></i></a>
+        </div>
+    </footer>    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('menu-icon').addEventListener('click', function() {
+            const verticalMenu = document.getElementById('vertical-menu');
+            verticalMenu.style.display = verticalMenu.style.display === 'block' ? 'none' : 'block';
+        });
+    </script>
 </body>
 </html>

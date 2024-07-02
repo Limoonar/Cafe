@@ -1,77 +1,44 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coffee Shop Admin Panel</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-xxx" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
+            background-size: cover;
+            background-color: #F8F7F5;
+            position: relative;
+            min-height: 100vh;
             display: flex;
-            flex-direction: column; /* Stack content vertically */
-            min-height: 100vh; /* Ensure full viewport height */
-            justify-content: center; /* Center content vertically */
-            align-items: center; /* Center content horizontally */
-            position: relative; /* Position relative for absolute positioning */
+            flex-direction: column;
         }
-        .sidebar {
-            background-color: #B9AC94;
-            color: #fff;
-            padding: 15px;
-            width: 200px;
-            height: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-        }
-        .sidebar a {
+        .content {
+            flex: 1;
             display: flex;
-            align-items: center; /* Align items vertically */
-            color: #fff;
-            text-decoration: none;
-            padding: 10px 15px; /* Adjust padding */
-            margin: 5px 0;
-        }
-        .sidebar a:hover {
-            background-color: #D6CCC2;
-        }
-        .sidebar .icon {
-            margin-right: 10px; /* Space between icon and text */
-        }
-        .sidebar .active {
-            background-color: #D6CCC2; /* Highlight color for active link */
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
         .container {
-            margin-left: 220px;
-            padding: 20px;
-            background: #F8F7F5;
-            border-radius: 5px;
+            background: #F5EBE0;
+            border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             max-width: 600px;
-            width: 100%; /* Ensure it takes full width of container */
-            box-sizing: border-box; /* Include padding and border in width calculation */
-            flex: 1; /* Allow container to grow and occupy remaining space */
-            overflow-y: auto; /* Enable vertical scrolling if content exceeds container height */
-            display: flex;
-            flex-direction: column; /* Stack content vertically */
-            justify-content: center; /* Center content vertically */
-            align-items: center; /* Center content horizontally */
+            width: 100%;
+            padding: 30px;
+            box-sizing: border-box;
+            text-align: center;
+            margin: 0 auto;
         }
         .add-product-header {
-            margin-top: 20px;
-            text-align: center; /* Center header text */
-        }
-        .add-product-form {
-            padding: 30px;
-            margin-top: 10px;
-            border-radius: 5px;
-            width: 100%; /* Ensure it takes full width */
-            box-sizing: border-box; /* Include padding and border in width calculation */
-            max-width: 600px; /* Limit maximum width */
+            text-align: center;
+            color: #582f0e;
+            margin-bottom: 20px;
+            font-weight: 700;
         }
         .form-group {
             margin-bottom: 15px;
@@ -81,7 +48,7 @@
             margin-bottom: 5px;
         }
         .form-group input, .form-group select, .form-group textarea {
-            width: calc(100% - 16px); /* Adjust for padding */
+            width: 100%;
             padding: 8px;
             box-sizing: border-box;
         }
@@ -89,123 +56,183 @@
             padding: 3px;
         }
         .btn {
-            background-color: #333;
+            background-color: #582f0e;
             color: #fff;
             border: none;
             padding: 10px 15px;
             cursor: pointer;
-            float: right; /* Float the button to the right */
+            display: block;
+            margin: 0 auto;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            color: #fff;
+            background-color: rgb(0, 123, 255);
         }
         @media (max-width: 768px) {
             .sidebar {
-                width: 100px; /* Adjust sidebar width for smaller screens */
+                width: 100px;
             }
-            .container {
-                margin-left: 120px; /* Adjust margin for smaller screens */
-                width: calc(100% - 140px); /* Adjust width for smaller screens */
+            .content {
+                margin-left: 120px;
+                padding: 20px;
             }
         }
-        .sidebar-img {
-            width: 20px; /* Adjust the size of the image */
-            height: auto;
-            margin-right: 10px; /* Optional: Add spacing between image and text */
+        header {
+            position: relative;
+            text-align: left;
+            padding: 5px;
+            margin-left: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #F4F3EE;
+        }
+        header a:hover, .footer a:hover {
+            text-decoration: underline;
         }
         .footer {
-            text-align: center;
-            background-color: #f8f8f8;
-            padding: 10px 0;
             width: 100%;
-            flex-shrink: 0; /* Prevent footer from shrinking */
-            margin-top: auto; /* Push footer to the bottom */
-        }
-        .footer-icons {
-            margin-top: 0px;
+            text-align: center;
+            color: #582f0e;
             font-size: 24px;
+            font-weight: bold;
+            padding: 20px 0;
+            background-color: #F5EBE0;
+            position: relative;
+            bottom: 0;
         }
-        .footer-icons a {
-            color: #333;
+        .footer a {
+            color: #582f0e;
             text-decoration: none;
-            margin: 0 0px;
-        }
-        .footer-icons a:hover {
-            color: #000;
         }
         .logo-container {
             position: absolute;
             top: 10px;
             right: 10px;
-            width: auto;
-            height: 100px; /* Adjust height to make it twice as large */
+            height: 100px;
         }
         .logo-container img {
-            height: 100%; /* Ensure the logo fills the container height */
-            width: auto; /* Maintain the aspect ratio */
+            height: 100%;
+            width: auto;
         }
-        .footer img {
-            max-width: 200px; /* Adjust this value to control the size of the footer image */
-            height: auto;
-            margin-bottom: 0px; /* Space between image and text */
+        .navbar-custom {
+            background-color: #582f0e;
         }
+        .navbar-custom .navbar-brand,
+        .navbar-custom .nav-link {
+            color: rgb(255, 255, 255);
+        }
+        .vertical-menu {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 220px;
+            height: 100%;
+            background-color: #D6CCC2;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            padding-top: 20px;
+            z-index: 1050;
+        }
+        .vertical-menu a {
+            padding: 12px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #000;
+            display: block;
+            border-bottom: 1px solid #ccc;
+            background-color: #F4F3EE;
+            margin: 5px;
+            border-radius: 10px;
+        }
+        .vertical-menu a:first-child {
+            font-weight: bold;
+            background-color: transparent;
+            border: none;
+            margin: 0;
+            border-radius: 10px;
+        }
+        .vertical-menu a:hover {
+            background-color: #ddd;
+        }  
     </style>
 </head>
 <body>
-    <div class="sidebar">
-        <a href="#vault-management">
-            <img src="C:\Users\Azar\Documents\GitHub\Cafe\images\25694.png" alt="Vault Icon" class="sidebar-img"> Vault Management
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <a class="navbar-brand" href="{% url 'index' %}">
+            <img src="{% static 'images/logo.png' %}" alt="Aroma Cafe Logo" style="height: 50px;">
         </a>
-        <a href="#add-product" class="active"> <!-- Added class "active" to highlight -->
-            <img src="C:\Users\Azar\Documents\GitHub\Cafe\images\images.png" alt="Add Icon" class="sidebar-img"> Add Product
-        </a>
-        <a href="#logout">
-            <img src="C:\Users\Azar\Documents\GitHub\Cafe\images\exit.png" alt="Logout Icon" class="sidebar-img"> Log Out of Admin
-        </a>
-    </div>
-    <!-- Logo container outside sidebar, positioned at top-right of the page -->
-    <div class="logo-container">
-        <img src="C:\Users\Azar\Documents\GitHub\Cafe\images\Aroma logo.png" alt="Your Logo">
-    </div>
-    <div class="container">
-        <h2 class="add-product-header">Add New Product:</h2>
-        <section class="add-product-form">
-            <form>
-                <div class="form-group">
-                    <label for="product-name">Product Name:</label>
-                    <input type="text" id="product-name" name="product-name" required>
-                </div>
-                <div class="form-group">
-                    <label for="category">Category:</label>
-                    <select id="category" name="category" required>
-                        <option value="Cold coffee">Cold coffee</option>
-                        <option value="Hot Coffee">Hot Coffee</option>
-                        <option value="cake">Cake</option>
-                        <option value="Food">Food</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="ingredients">Ingredients:</label>
-                    <textarea id="ingredients" name="ingredients" rows="4" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="product-price">Price:</label>
-                    <input type="number" id="product-price" name="product-price" required>
-                </div>
-                <div class="form-group">
-                    <label for="product-image">Product Image:</label>
-                    <input type="file" id="product-image" name="product-image" required>
-                </div>
-                <button type="submit" class="btn">Add Product</button>
-            </form>
-        </section>
-    </div>
-    <div class="footer">
-        <img src="C:\Users\Azar\Documents\GitHub\Cafe\images\Group 174.png" alt="Footer Image Placeholder"> <!-- Placeholder for the footer image -->
-        <div class="footer-icons">
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-telegram"></i></a>
-            <a href="#"><i class="fab fa-facebook"></i></a>
-            <a href="#"><i class="fab fa-youtube"></i></a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" id="menu-icon"><i class="fas fa-bars"></i> Admin Menu</a>
+                </li>
+                {% if request.session.username %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}"><i class="fas fa-user"></i> Login to Account</a>
+                </li>
+                {% endif %}
+            </ul>
         </div>
-        <p>&copy; 2024 Aroma Cafe</p>
+    </nav>
+    <div id="vertical-menu" class="vertical-menu">
+        <a>Admin Menu</a>
+        <a href="{% url 'inventory_management' %}" id="stock-link">Inventory Management</a>
+        <a href="{% url 'add_products' %}" id="add-product-link">Add Product</a>
+        <a href="{% url 'adminpage' %}"  id="dashboard-link">Dashboard</a>
     </div>
+
+    <div class="content">
+        <div class="container" style="justify-self: center;">
+            <h2 class="add-product-header">Add New Product:</h2>
+            <section class="add-product-form">
+                <form>
+                    <div class="form-group">
+                        <label for="product-name">Product Name:</label>
+                        <input type="text" id="product-name" name="product-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Category:</label>
+                        <select id="category" name="category" required>
+                            <option value="Cold coffee">Cold coffee</option>
+                            <option value="Hot Coffee">Hot Coffee</option>
+                            <option value="cake">Cake</option>
+                            <option value="Food">Food</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="ingredients">Ingredients:</label>
+                        <textarea id="ingredients" name="ingredients" rows="4" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-price">Price:</label>
+                        <input type="number" id="product-price" name="product-price" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-image">Product Image:</label>
+                        <input type="file" id="product-image" name="product-image" required>
+                    </div>
+                    <button type="submit" class="btn">Add Product</button>
+                </form>
+            </section>
+        </div>
+    </div>
+    <footer class="footer">
+        <p>&copy; 2024 <a href="{% url 'index' %}">Aroma Cafe</a></p>
+        <a href="#" style="color: #582f0e;" class="mx-2"><i class="fab fa-instagram"></i></a>
+        <a href="#" style="color: #582f0e;" class="mx-2"><i class="fab fa-telegram"></i>
+        <a href="#" style="color: #582f0e;" class="mx-2"><i class="fab fa-youtube"></i></a>
+    </footer>
+    <script>
+        document.getElementById('menu-icon').addEventListener('click', function() {
+            const verticalMenu = document.getElementById('vertical-menu');
+            verticalMenu.style.display = verticalMenu.style.display === 'block' ? 'none' : 'block';
+        });
+    </script>    
 </body>
 </html>
