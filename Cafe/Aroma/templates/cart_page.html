@@ -38,6 +38,49 @@
             font-weight: bold;
             text-align: center;
         }
+        .vertical-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200px;
+            height: 100%;
+            background-color: #D6CCC2;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            padding-top: 60px;
+            z-index: 1050;
+        }
+        .vertical-menu a {
+            padding: 12px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #000;
+            display: block;
+        }
+        .vertical-menu a:hover {
+            background-color: #ddd;
+        }
+        .vertical-menu a {
+            padding: 12px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #000;
+            display: block;
+            border-bottom: 1px solid #ccc;
+            background-color: #F4F3EE;
+            margin: 5px;
+            border-radius: 10px;
+        }
+        .vertical-menu a:first-child {
+            font-weight: bold;
+            background-color: transparent;
+            border: none;
+            margin: 0;
+            border-radius: 10px;
+        }
+        .show {
+            display: block;
+        }        
     </style>
 </head>
 <body style="background-color: #F5EBE0;">
@@ -51,7 +94,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'products' %}"><i class="fas fa-bars"></i> Menu</a>
+                    <a class="nav-link" href="#" id="menu-icon"><i class="fas fa-bars"></i> Menu</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'order_history' %}"><i class="fas fa-receipt"></i> Purchase Records</a>
@@ -71,7 +114,14 @@
             </ul>
         </div>
     </nav>
-
+    <!-- Vertical Menu (hidden by default) -->
+    <div id="vertical-menu" class="vertical-menu">
+        <a>Menu</a>
+        <a href="{% url 'products' %}?vertical=Cold+Drink">Cold Drinks</a>
+        <a href="{% url 'products' %}?vertical=Hot+Drink">Hot Drinks</a>
+        <a href="{% url 'products' %}?vertical=Cake">Cake</a>
+        <a href="{% url 'products' %}?vertical=Food">Food</a>
+    </div>
     <div class="container mt-5">
         <h2 class="cart-heading" style="font-weight: 700;">Shopping Cart</h2>
         <div class="cart-box">
@@ -143,7 +193,8 @@
             <p>&copy; 2024 Aroma Cafe</p>
             <a href="#" class="text-white mx-2"><i class="fab fa-instagram"></i></a>
             <a href="#" class="text-white mx-2"><i class="fab fa-telegram"></i></a>
-            <a href="#" class="text-white mx-2"><i class="fab fa-facebook"></i></a>
+            <a href="#" class="text-white mx-2"><i class="```html
+fab fa-facebook"></i></a>
             <a href="#" class="text-white mx-2"><i class="fab fa-youtube"></i></a>
         </div>
         <div class="footer-right">
@@ -154,5 +205,13 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Custom JavaScript to handle menu click -->
+    <script>
+        document.getElementById('menu-icon').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default anchor behavior
+            document.getElementById('vertical-menu').classList.toggle('show');
+        });
+    </script>
 </body>
 </html>
