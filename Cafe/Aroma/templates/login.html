@@ -111,7 +111,7 @@
                         <div class="text-center mb-3">
                             <h4>Receive OTP</h4>
                         </div>
-                        <form method="POST" action="#">
+                        <form method="POST" action="{% url 'verify_phone_number' %}">
                             {% csrf_token %}
                             <div class="form-group">
                                 <label for="mobileNumber">Mobile Number</label>

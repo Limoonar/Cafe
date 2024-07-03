@@ -49,24 +49,10 @@ def login_view(request):
             # If user exists, check password
             if user:
                 # Manually compare hashed password
-                if password == user.Password:
+                if password == user.Password or check_password(password, user.Password):
                     request.session['username'] = user.Username
                     request.session['cart']= {}
                     return redirect('index')
-                    # global phone, random_code
-                    # random_code = randint(1000, 9999)
-                    # phone = '0' + str(user.Phone_Number)
-                    # message = str(random_code)
-                    # receptor = phone
-                    # linenumber = "10008566"
-                    # #sms = ghasedakpack.Ghasedak("7cfab86d60b9fc7621f8a572dbec81d2628cfc6a387a05d724bc406d7848251f")
-                    # #sms.send({'message': message,'receptor': receptor,'linenumber': linenumber})
-
-                    # # Store necessary data in session
-                    # request.session['temp_username'] = user.Username
-                    # request.session['random_code'] = random_code
-
-                    # return redirect('otp_verify')  # Redirect to OTP verification page
                 else:
                     error = 'Invalid credentials'
             else:
@@ -96,6 +82,32 @@ def logout_view(request):
         del request.session['username']  # Remove username from session
     return redirect('index')  # Redirect to main page after logout
 
+
+def verify_phone_number(request):
+    if request.method == 'POST':
+        mobile_number = request.POST.get('mobileNumber')
+
+        try:
+            user = Users.objects.get(Phone_Number=mobile_number)
+            random_code = randint(1000, 9999)
+            phone = '0'+str(user.Phone_Number)
+            message = str(random_code)
+            receptor = phone
+            linenumber = "10008566"
+            sms = ghasedakpack.Ghasedak("7cfab86d60b9fc7621f8a572dbec81d2628cfc6a387a05d724bc406d7848251f")
+            sms.send({'message': message,'receptor': receptor,'linenumber': linenumber})
+
+            #Store necessary data in session
+            request.session['temp_username'] = user.Username
+            request.session['random_code'] = random_code
+
+            return redirect('otp_verify')
+
+        except Users.DoesNotExist:
+            error= "Phone number not found."
+            return render(request, 'login.html', {'error': error})
+
+    return render(request, 'login.html')
 
 def otp_verify_view(request):
     if request.method == 'POST':

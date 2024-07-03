@@ -1,21 +1,132 @@
 <!-- otp_verify.html -->
 
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OTP Verification</title>
+
+    <!-- Add Bootstrap CSS for better styling -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Add Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            background: url('{% static "images/Login_Background.jpg" %}') no-repeat center center fixed;
+            background-size: cover;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        .card {
+            color: #582f0e;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            width: 50%;
+            margin: auto;
+            margin-top: 100px;
+        }
+
+        .center-login-btn {
+            display: flex;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .footer {
+            position: relative;
+            bottom: 10;
+            width: 100%;
+            text-align: center;
+            color: #582f0e;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .card-header {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            background-color: #582f0e;
+            color: white;
+            padding: 10px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        header {
+            position: relative;
+            text-align: left;
+            width: 100%;
+            padding: 5px;
+            margin-left: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #F4F3EE;
+        }
+
+        .footer a {
+            color: #582f0e;
+            text-decoration: none;
+        }
+
+        header a:hover, .footer a:hover {
+            text-decoration: underline;
+        }
+        .btn {
+            background-color: #582f0e;
+            border-color: #582f0e;
+        }
+        .btn:hover {
+            color: #582f0e;
+            background-color: #ede0d4;
+            border-color: #582f0e;
+        }
+    </style>
 </head>
 <body>
-    <h1>OTP Verification</h1>
-    {% if error %}
-        <p style="color: red;">{{ error }}</p>
-    {% endif %}
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Verify OTP</button>
-    </form>
-    <a href="{% url 'login' %}">Back to Login</a>
+<header>
+    <a href="{% url 'index' %}"> <img src="{% static 'images/logo.png' %}" alt="Aroma Cafe Logo" style="height: 60px;"> </a>
+</header>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">OTP Verification</div>
+                    <div class="card-body">
+                        {% if error %}
+                        <p style="color: red;">{{ error }}</p>
+                        {% endif %}
+                        <form method="post">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <div class="center-login-btn">
+                                <button type="submit" class="btn btn-primary">Verify OTP</button>
+                            </div>
+                        </form>
+                        <div class="center-login-btn">
+                            <a href="{% url 'login' %}" class="btn btn-link">Back to Login</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer mt-5 py-4 text-center" style="color: #582f0e;">
+        <div class="container">
+            <p>&copy; 2024 <a href="{% url 'index' %}">Aroma Cafe</a></p>
+            <a href="#" style="color: #582f0e;" class="mx-2"><i class="fab fa-instagram"></i></a>
+            <a href="#" style="color: #582f0e;" class="mx-2"><i class="fab fa-telegram"></i></a>
+            <a href="#" style="color: #582f0e;" class="mx-2"><i class="fab fa-facebook"></i></a>
+            <a href="#" style="color: #582f0e;" class="mx-2"><i class="fab fa-youtube"></i></a>
+        </div>
+    </footer>
+
+    <!-- Add your JS links here -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
