@@ -61,11 +61,11 @@
             display: block;
         }
         .navbar-custom {
-            background-color: #582f0e; /* Change this to your desired color */
+            background-color: #582f0e; 
         }
         .navbar-custom .navbar-brand,
         .navbar-custom .nav-link {
-            color: rgb(255, 255, 255); /* Change the text color to contrast with the background */
+            color: rgb(255, 255, 255); 
         }
         .navbar-toggler-icon {
             background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
@@ -75,12 +75,10 @@
             border-color: #582f0e;
         }
 
-        /* CSS for centering the button */
         .center-button {
             text-align: center;
         }
 
-        /* CSS for the vertical choices container */
         .vertical-choices {
             background-color: #D6CCC2;
             padding: 10px;
@@ -108,12 +106,12 @@
             margin: 20px auto;
         }
         .carousel-inner img {
-            border-radius: 20px; /* Apply rounded corners to the images inside the carousel */
+            border-radius: 20px; 
         }
         .alert-insufficient {
-            background-color: #f8d7da; /* Faded red background */
-            color: #721c24; /* Dark red text */
-            border-color: #f5c6cb; /* Border color to match the background */
+            background-color: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
         }
     </style>
 </head>
@@ -160,8 +158,7 @@
     </div>
 
     
-    <!--<div class="container">
-        <!-- Messages Section -->
+
         {% if messages %}
             <div class="messages mt-3">
                 {% for message in messages %}
@@ -274,14 +271,11 @@
                 const maxStock = parseInt(quantityInput.getAttribute('max'));
                 const currentCartQuantity = parseInt(quantityInput.getAttribute('value'));
         
-                // Check if adding more exceeds available stock
                 if (quantity + currentCartQuantity > maxStock) {
-                    // Show Bootstrap modal with warning
                     $('#add-to-cart-modal').modal('show');
                     return;
                 }
         
-                // Submit form if validation passes
                 form.submit();
             });
         });
@@ -301,14 +295,12 @@
             const maxStock = parseInt(quantityInput.getAttribute('max'));
             const currentCartQuantity = parseInt(quantityInput.getAttribute('value'));
     
-            // Check if adding more exceeds available stock
             if (quantity + currentCartQuantity > maxStock) {
                 // Show Bootstrap modal with warning
                 $('#add-to-cart-modal').modal('show');
                 return;
             }
     
-            // Submit form if validation passes
             form.submit();
         });
     });

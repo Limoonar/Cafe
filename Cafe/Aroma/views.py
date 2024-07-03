@@ -18,7 +18,7 @@ sms = ghasedakpack.Ghasedak("a26658f51d8f300e354cf8d137bca49aab329de737a80c80f50
 
 def index(request):
     # Query to get the top 2 most ordered products
-    top_products = Product.objects.annotate(num_orders=Count('Orders')).order_by('-num_orders')[:12]
+    top_products = Product.objects.annotate(num_orders=Count('Orders')).order_by('-num_orders')[:2]
 
     context = {
         'top_products': top_products,
@@ -474,19 +474,19 @@ def adminpage_view(request):
 
 
 def best_selling_products_api(request):
-    # Fetch the top 12 products based on the number of orders
-    best_selling_products = Product.objects.annotate(num_orders=Count('Orders')).order_by('-num_orders')[:12]
+    # Fetch the top 2 products based on the number of orders
+    best_selling_products = Product.objects.annotate(num_orders=Count('Orders')).order_by('-num_orders')[:2]
 
     # Prepare JSON response
     data = {
         'products': [
             {
-                'name': product.Name,
-                'price': product.Price,
-                'image_url': product.image_url,
+                'name': Product.Name,
+                'price': Product.Price,
+                'image_url': Product.image_url,
             }
             for product in best_selling_products
         ]
     }
 
-    return JsonResponse(data, safe=False)
+    return JsonResponse(data)
