@@ -10,109 +10,8 @@
     <title>Products Page</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-</head>
-<body style="background-color: #F5EBE0;">
-   <nav class="navbar navbar-expand-lg navbar-custom">
-        <a class="navbar-brand" href="{% url 'index' %}">
-            <img src="{% static 'images/logo.png' %}" alt="Aroma Cafe Logo" style="height: 50px;">
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#" id="menu-icon"><i class="fas fa-bars"></i> Menu</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'order_history' %}"><i class="fas fa-receipt"></i> Purchase Records</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'cart'%}"><i class="fas fa-shopping-cart"></i> Cart</a>
-                </li>
-                {% if request.session.username %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                </li>
-                {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}"><i class="fas fa-user"></i> Login to Account</a>
-                </li>
-                {% endif %}
-            </ul>
-        </div>
-    </nav>
-
-   <!-- Vertical Menu (hidden by default) -->
-    <div id="vertical-menu" class="vertical-menu">
-        <a>Menu</a>
-        <a href="{% url 'products' %}?vertical=Cold+Drink">Cold Drinks</a>
-        <a href="{% url 'products' %}?vertical=Hot+Drink">Hot Drinks</a>
-        <a href="{% url 'products' %}?vertical=Cake">Cake</a>
-        <a href="{% url 'products' %}?vertical=Food">Food</a>
-    </div>
-    <!-- Products -->
-    <div class="container mt-5">
-        <h2>Products - {{ vertical }}</h2>
-        <nav>
-            <ul>
-                <li><a href="{% url 'products' %}?vertical=All">All</a></li>
-                {% for choice in vertical_choices %}
-                <li><a href="{% url 'products' %}?vertical={{ choice.0 }}">{{ choice.1 }}</a></li>
-                {% endfor %}
-            </ul>
-        </nav>
-
-        <div class="row">
-            {% for product in products %}
-                <div class="col-md-3">
-                    <div class="card">
-                        <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.Name }}">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ product.Name }}</h5>
-                            <p class="card-text">${{ product.Price }}</p>
-                            <form id="add-to-cart-form" method="POST" action="{% url 'add_to_cart' product.id %}">
-                                {% csrf_token %}
-                                <div class="form-group">
-                                    <label for="quantity">Quantity:</label>
-                                    <input type="number" name="quantity" min="1" max="{{ product.stock_available }}" value="{{ request.session.cart|get_item:product.id }}" class="form-control" id="quantity">
-                                </div>
-                                <input type="hidden" name="vertical" value="{{ vertical }}">
-                                <button type="submit" class="btn btn-primary" id="add-to-cart-btn">Update Cart</button>
-                            </form>
-                            
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-    </div>
-
-    <footer class="mt-5 py-4 text-center" style="background-color: #582f0e; color: #fff;">
-        <div class="container">
-            <p>&copy; 2024 Aroma Cafe</p>
-            <a href="#" class="text-white mx-2"><i class="fab fa-instagram"></i></a>
-            <a href="#" class="text-white mx-2"><i class="fab fa-telegram"></i></a>
-            <a href="#" class="text-white mx-2"><i class="fab fa-facebook"></i></a>
-            <a href="#" class="text-white mx-2"><i class="fab fa-youtube"></i></a>
-        </div>
-        <div class="footer-right">
-            <img src="{% static 'images/enamad.png' %}" alt="Enamd" class="footer-logo" style="height: 90px; margin-left: 1300px; margin-bottom: 40px;">
-        </div>
-    </footer>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    <script>
-        document.getElementById('menu-icon').addEventListener('click', function() {
-            document.getElementById('vertical-menu').classList.toggle('show');
-        });
-    </script>  
-    
-    <!-- Add your CSS for vertical menu -->
     <style>
+        /* CSS for vertical menu */
         .best-selling-section {
             background-color: #D6CCC2;
             padding: 20px;
@@ -161,14 +60,6 @@
         .show {
             display: block;
         }
-        .carousel {
-            max-width: 1000px;
-            padding: 15px;
-            margin: 20px auto;
-        }
-        .carousel-inner img {
-            border-radius: 20px; /* Apply rounded corners to the images inside the carousel */
-        }
         .navbar-custom {
             background-color: #582f0e; /* Change this to your desired color */
         }
@@ -179,50 +70,178 @@
         .navbar-toggler-icon {
             background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
         }
+        .btn {
+            background-color: #99582a;
+            border-color: #582f0e;
+        }
+
+        /* CSS for centering the button */
+        .center-button {
+            text-align: center;
+        }
+
+        /* CSS for the vertical choices container */
+        .vertical-choices {
+            background-color: #D6CCC2;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .vertical-choices a {
+            color: #582f0e;
+            font-weight: bold;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .vertical-choices a:hover {
+            text-decoration: underline;
+        }
     </style>
+</head>
+<body style="background-color: #F5EBE0;">
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <a class="navbar-brand" href="{% url 'index' %}">
+            <img src="{% static 'images/logo.png' %}" alt="Aroma Cafe Logo" style="height: 50px;">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" id="menu-icon"><i class="fas fa-bars"></i> Menu</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'order_history' %}"><i class="fas fa-receipt"></i> Purchase Records</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'cart'%}"><i class="fas fa-shopping-cart"></i> Cart</a>
+                </li>
+                {% if request.session.username %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}"><i class="fas fa-user"></i> Login to Account</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Vertical Menu (hidden by default) -->
+    <div id="vertical-menu" class="vertical-menu">
+        <a>Menu</a>
+        <a href="{% url 'products' %}?vertical=Cold+Drink">Cold Drinks</a>
+        <a href="{% url 'products' %}?vertical=Hot+Drink">Hot Drinks</a>
+        <a href="{% url 'products' %}?vertical=Cake">Cake</a>
+        <a href="{% url 'products' %}?vertical=Food">Food</a>
+    </div>
+
+    <!-- Products -->
+    <div class="container mt-5">
+        <h2 style="color: #582f0e; text-align: center; font-weight: 700;">Products - {{ vertical }}</h2>
+        <div class="vertical-choices">
+            <a href="{% url 'products' %}?vertical=All">All</a>
+            {% for choice in vertical_choices %}
+            <a href="{% url 'products' %}?vertical={{ choice.0 }}">{{ choice.1 }}</a>
+            {% endfor %}
+        </div>
+
+        <div class="row">
+            {% for product in products %}
+                <div class="col-md-3 mb-4">
+                    <div class="card">
+                        <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.Name }}">
+                        <div class="card-body">
+                            <h5 class="card-title" style="color: #582f0e; text-align: center; font-weight: 650;">{{ product.Name }}</h5>
+                            <p class="card-text" style="color: #582f0e; text-align: center; font-family: 400;">${{ product.Price }}</p>
+                            <form id="add-to-cart-form" method="POST" action="{% url 'add_to_cart' product.id %}">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="quantity" style="color: #582f0e;">Quantity:</label>
+                                    <input type="number" name="quantity" min="1" max="{{ product.stock_available }}" value="{{ request.session.cart|get_item:product.id }}" class="form-control" id="quantity">
+                                </div>
+                                <input type="hidden" name="vertical" value="{{ vertical }}">
+                                <div class="center-button">
+                                    <button type="submit" class="btn btn-primary" id="add-to-cart-btn">Update Cart</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <footer class="mt-5 py-4 text-center" style="background-color: #582f0e; color: #fff;">
+        <div class="container">
+            <p>&copy; 2024 Aroma Cafe</p>
+            <a href="#" class="text-white mx-2"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="text-white mx-2"><i class="fab fa-telegram"></i></a>
+            <a href="#" class="text-white mx-2"><i class="fab fa-facebook"></i></a>
+            <a href="#" class="text-white mx-2"><i class="fab fa-youtube"></i></a>
+        </div>
+        <div class="footer-right">
+            <img src="{% static 'images/enamad.png' %}" alt="Enamd" class="footer-logo" style="height: 90px; margin-left: 1300px; margin-bottom: 40px;">
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        document.getElementById('menu-icon').addEventListener('click', function() {
+            document.getElementById('vertical-menu').classList.toggle('show');
+        });
+    </script>  
+    
     <!-- Bootstrap Modal for Add to Cart Warning -->
-<div class="modal fade" id="add-to-cart-modal" tabindex="-1" role="dialog" aria-labelledby="add-to-cart-modal-title" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="add-to-cart-modal-title">Warning: Cannot Add More Items</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Sorry, you cannot add more items to your cart than what's available in stock.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    <div class="modal fade" id="add-to-cart-modal" tabindex="-1" role="dialog" aria-labelledby="add-to-cart-modal-title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="add-to-cart-modal-title">Warning: Cannot Add More Items</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Sorry, you cannot add more items to your cart than what's available in stock.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('add-to-cart-form');
+            const quantityInput = document.getElementById('quantity');
+            const addToCartBtn = document.getElementById('add-to-cart-btn');
+        
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const quantity = parseInt(quantityInput.value);
+                const maxStock = parseInt(quantityInput.getAttribute('max'));
+                const currentCartQuantity = parseInt(quantityInput.getAttribute('value'));
+        
+                // Check if adding more exceeds available stock
+                if (quantity + currentCartQuantity > maxStock) {
+                    // Show Bootstrap modal with warning
+                    $('#add-to-cart-modal').modal('show');
+                    return;
+                }
+        
+                // Submit form if validation passes
+                form.submit();
+            });
+        });
+    </script>  
 </body>
 </html>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.getElementById('add-to-cart-form');
-        const quantityInput = document.getElementById('quantity');
-        const addToCartBtn = document.getElementById('add-to-cart-btn');
-    
-        form.addEventListener('submit', function(event) {
-            event.preventDefault();
-            const quantity = parseInt(quantityInput.value);
-            const maxStock = parseInt(quantityInput.getAttribute('max'));
-            const currentCartQuantity = parseInt(quantityInput.getAttribute('value'));
-    
-            // Check if adding more exceeds available stock
-            if (quantity + currentCartQuantity > maxStock) {
-                // Show Bootstrap modal with warning
-                $('#add-to-cart-modal').modal('show');
-                return;
-            }
-    
-            // Submit form if validation passes
-            form.submit();
-        });
-    });
-</script>  
