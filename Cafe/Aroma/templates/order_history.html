@@ -82,37 +82,6 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-custom">
-        <a class="navbar-brand" href="{% url 'index' %}">
-            <img src="{% static 'images/logo.png' %}" alt="Aroma Cafe Logo" style="height: 50px;">
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#" id="menu-icon"><i class="fas fa-bars"></i> Menu</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'order_history' %}"><i class="fas fa-receipt"></i> Purchase Records</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/cart/"><i class="fas fa-shopping-cart"></i> Cart</a>
-                </li>
-                {% if request.session.username %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                </li>
-                {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}"><i class="fas fa-user"></i> Login to Account</a>
-                </li>
-                {% endif %}
-            </ul>
-        </div>
-    </nav>
-
     <div class="wrapper">
         <div class="container">
             <h2>History of Purchases</h2>
@@ -156,5 +125,12 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Custom JavaScript to handle menu click -->
+    <script>
+        document.getElementById('menu-icon').addEventListener('click', function() {
+            document.getElementById('vertical-menu').classList.toggle('show');
+        });
+    </script>
 </body>
 </html>
