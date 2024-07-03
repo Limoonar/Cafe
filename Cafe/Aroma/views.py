@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden, HttpResponse, JsonResponse
 from django.contrib import messages
 from django.db.models import Count
+from django.utils import timezone
 
 sms = ghasedakpack.Ghasedak("a26658f51d8f300e354cf8d137bca49aab329de737a80c80f507fb883b2ffeba")
 
@@ -227,38 +228,41 @@ def purchase_view(request):
     return render(request, 'products_page.html', context)'''
 
 def products_page_view(request):
-    vertical = request.GET.get('vertical', 'All')
-    if vertical == 'All':
-        products = Product.objects.all()
+    if request.session.get('username') == 'admin':
+        return HttpResponseForbidden("You are not allowed to access this page.")
     else:
-        products = Product.objects.filter(Vertical=vertical)
-
-    try:
-        storage = Storage.objects.latest('id')
-    except Storage.DoesNotExist:
-        storage = None
-
-    sold_out_products = []
-    for product in products:
-        if (storage and (storage.sugar < product.Sugar or
-                         storage.flour < product.Flour or
-                         storage.coffee < product.Coffee or
-                         storage.chocolate < product.Chocolate)):
-            product.is_sold_out = True
-            sold_out_products.append(product.Name)
+        vertical = request.GET.get('vertical', 'All')
+        if vertical == 'All':
+            products = Product.objects.all()
         else:
-            product.is_sold_out = False
-        product.available_quantity = calculate_available_quantity(product, storage)
+            products = Product.objects.filter(Vertical=vertical)
 
-    if sold_out_products:
-        messages.warning(request, f"The following products are sold out: {', '.join(sold_out_products)}")
+        try:
+            storage = Storage.objects.latest('id')
+        except Storage.DoesNotExist:
+            storage = None
 
-    return render(request, 'products_page.html', {
-        'products': products,
-        'vertical': vertical,
-        'vertical_choices': Product.VERTICAL_CHOICES,
-        'storage': storage
-    })
+        sold_out_products = []
+        for product in products:
+            if (storage and (storage.sugar < product.Sugar or
+                             storage.flour < product.Flour or
+                             storage.coffee < product.Coffee or
+                             storage.chocolate < product.Chocolate)):
+                product.is_sold_out = True
+                sold_out_products.append(product.Name)
+            else:
+                product.is_sold_out = False
+            product.available_quantity = calculate_available_quantity(product, storage)
+
+        if sold_out_products:
+            messages.warning(request, f"The following products are sold out: {', '.join(sold_out_products)}")
+
+        return render(request, 'products_page.html', {
+            'products': products,
+            'vertical': vertical,
+            'vertical_choices': Product.VERTICAL_CHOICES,
+            'storage': storage
+        })
 
 def calculate_available_quantity(product, storage):
     available_sugar = storage.sugar // product.Sugar if product.Sugar else float('inf')

@@ -53,4 +53,4 @@ class UpdateInventoryForm(forms.ModelForm):
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Orders
-        fields = ['Products', 'Purchase_amount', 'Type']
+        fields = ['Products', 'Purchase_amount', 'Type', 'created_at']
