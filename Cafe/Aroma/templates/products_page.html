@@ -10,6 +10,99 @@
     <title>Products Page</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        /* CSS for vertical menu */
+        .best-selling-section {
+            background-color: #D6CCC2;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .vertical-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200px;
+            height: 100%;
+            background-color: #D6CCC2;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            padding-top: 60px;
+            z-index: 1050;
+        }
+        .vertical-menu a {
+            padding: 12px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #000;
+            display: block;
+        }
+        .vertical-menu a:hover {
+            background-color: #ddd;
+        }
+        .vertical-menu a {
+            padding: 12px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #000;
+            display: block;
+            border-bottom: 1px solid #ccc;
+            background-color: #F4F3EE;
+            margin: 5px;
+            border-radius: 10px;
+        }
+        .vertical-menu a:first-child {
+            font-weight: bold;
+            background-color: transparent;
+            border: none;
+            margin: 0;
+            border-radius: 10px;
+        }
+        .show {
+            display: block;
+        }
+        .navbar-custom {
+            background-color: #582f0e; /* Change this to your desired color */
+        }
+        .navbar-custom .navbar-brand,
+        .navbar-custom .nav-link {
+            color: rgb(255, 255, 255); /* Change the text color to contrast with the background */
+        }
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+        }
+        .btn {
+            background-color: #99582a;
+            border-color: #582f0e;
+        }
+
+        /* CSS for centering the button */
+        .center-button {
+            text-align: center;
+        }
+
+        /* CSS for the vertical choices container */
+        .vertical-choices {
+            background-color: #D6CCC2;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .vertical-choices a {
+            color: #582f0e;
+            font-weight: bold;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .vertical-choices a:hover {
+            text-decoration: underline;
+        }
+        .btn:hover {
+            color: #582f0e;
+            background-color: #ede0d4;
+            border-color: #582f0e;
+        }
+    </style>
 </head>
 <body style="background-color: #F5EBE0;">
    <nav class="navbar navbar-expand-lg navbar-custom">
@@ -80,34 +173,33 @@
         
     <!-- Products -->
     <div class="container mt-5">
-        <h2>Products - {{ vertical }}</h2>
-        <nav>
-            <ul>
-                <li><a href="{% url 'products' %}?vertical=All">All</a></li>
-                {% for choice in vertical_choices %}
-                <li><a href="{% url 'products' %}?vertical={{ choice.0 }}">{{ choice.1 }}</a></li>
-                {% endfor %}
-            </ul>
-        </nav>
+        <h2 style="color: #582f0e; text-align: center; font-weight: 700;">Products - {{ vertical }}</h2>
+        <div class="vertical-choices">
+            <a href="{% url 'products' %}?vertical=All">All</a>
+            {% for choice in vertical_choices %}
+            <a href="{% url 'products' %}?vertical={{ choice.0 }}">{{ choice.1 }}</a>
+            {% endfor %}
+        </div>
 
         <div class="row">
             {% for product in products %}
-                <div class="col-md-3">
+                <div class="col-md-3 mb-4">
                     <div class="card">
                         <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.Name }}">
                         <div class="card-body">
-                            <h5 class="card-title">{{ product.Name }}</h5>
-                            <p class="card-text">${{ product.Price }}</p>
+                            <h5 class="card-title" style="color: #582f0e; text-align: center; font-weight: 650;">{{ product.Name }}</h5>
+                            <p class="card-text" style="color: #582f0e; text-align: center; font-family: 400;">${{ product.Price }}</p>
                             <form id="add-to-cart-form" method="POST" action="{% url 'add_to_cart' product.id %}">
                                 {% csrf_token %}
                                 <div class="form-group">
-                                    <label for="quantity">Quantity:</label>
+                                    <label for="quantity" style="color: #582f0e;">Quantity:</label>
                                     <input type="number" name="quantity" min="1" max="{{ product.stock_available }}" value="{{ request.session.cart|get_item:product.id }}" class="form-control" id="quantity">
                                 </div>
                                 <input type="hidden" name="vertical" value="{{ vertical }}">
-                                <button type="submit" class="btn btn-primary" id="add-to-cart-btn">Update Cart</button>
+                                <div class="center-button">
+                                    <button type="submit" class="btn btn-primary" id="add-to-cart-btn">Update Cart</button>
+                                </div>
                             </form>
-                            
                         </div>
                     </div>
                 </div>
@@ -208,24 +300,49 @@
         }
     </style>
     <!-- Bootstrap Modal for Add to Cart Warning -->
-<div class="modal fade" id="add-to-cart-modal" tabindex="-1" role="dialog" aria-labelledby="add-to-cart-modal-title" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="add-to-cart-modal-title">Warning: Cannot Add More Items</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Sorry, you cannot add more items to your cart than what's available in stock.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    <div class="modal fade" id="add-to-cart-modal" tabindex="-1" role="dialog" aria-labelledby="add-to-cart-modal-title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="add-to-cart-modal-title">Warning: Cannot Add More Items</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Sorry, you cannot add more items to your cart than what's available in stock.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('add-to-cart-form');
+            const quantityInput = document.getElementById('quantity');
+            const addToCartBtn = document.getElementById('add-to-cart-btn');
+        
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const quantity = parseInt(quantityInput.value);
+                const maxStock = parseInt(quantityInput.getAttribute('max'));
+                const currentCartQuantity = parseInt(quantityInput.getAttribute('value'));
+        
+                // Check if adding more exceeds available stock
+                if (quantity + currentCartQuantity > maxStock) {
+                    // Show Bootstrap modal with warning
+                    $('#add-to-cart-modal').modal('show');
+                    return;
+                }
+        
+                // Submit form if validation passes
+                form.submit();
+            });
+        });
+    </script>  
 </body>
 </html>
 
