@@ -137,7 +137,7 @@ def otp_verify_view(request):
 
 def add_products_view(request):
     if request.session.get('username') != 'admin':
-        return HttpResponseForbidden("You are not allowed to access this page.")
+        return redirect('access')
  
     if request.method == 'POST':
         form = ProductForm(request.POST)
@@ -152,7 +152,7 @@ def add_products_view(request):
 #@login_required
 def inventory_management_view(request):
     if request.session.get('username') != 'admin':
-        return HttpResponseForbidden("You are not allowed to access this page.")
+        return redirect('access')
     if request.method == 'POST':
         return redirect ('inventory_update')
     if request.method == 'GET':
@@ -241,7 +241,7 @@ def purchase_view(request):
 
 def products_page_view(request):
     if request.session.get('username') == 'admin':
-        return HttpResponseForbidden("You are not allowed to access this page.")
+        return redirect('access')
     else:
         vertical = request.GET.get('vertical', 'All')
         if vertical == 'All':
@@ -455,7 +455,7 @@ def filter_orders(request):
     return JsonResponse(data, safe=False)
 def adminpage_view(request):
     if request.session.get('username') != 'admin':
-        return HttpResponseForbidden("You are not allowed to access this page.")
+        return redirect('access')
     # Get all orders
     orders = Orders.objects.all()
 

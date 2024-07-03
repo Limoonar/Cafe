@@ -114,6 +114,13 @@
             border-color: #f5c6cb;
         }
     </style>
+    <style>
+    /* Other styles... */
+
+    .card.sold-out {
+        background-color: #C0C0C0; /* Change background color to gray */
+    }
+    </style>
 </head>
 <body style="background-color: #F5EBE0;">
    <nav class="navbar navbar-expand-lg navbar-custom">
@@ -194,7 +201,7 @@
         <div class="row">
             {% for product in products %}
                 <div class="col-md-3 mb-4">
-                    <div class="card">
+                    <div class="card {% if product.is_sold_out %}sold-out{% endif %}">
                         <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.Name }}">
                         <div class="card-body">
                             <h5 class="card-title" style="color: #582f0e; text-align: center; font-weight: 650;">{{ product.Name }}</h5>
@@ -215,7 +222,6 @@
                 </div>
             {% endfor %}
         </div>
-    </div>
 
     <footer class="mt-5 py-4 text-center" style="background-color: #582f0e; color: #fff;">
         <div class="container">

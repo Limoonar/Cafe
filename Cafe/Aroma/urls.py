@@ -30,6 +30,7 @@ urlpatterns = [
     path('order_history/', views.order_history, name='order_history'),
     path('api/orders/', views.filter_orders, name='filter_orders'),
     path('api/best-selling-products/', views.best_selling_products_api, name='best_selling_products_api'),
+    path('access/', views.render, {'template_name': 'access.html'}, name='access'),
 
     # Other URLs for your views
 ]
