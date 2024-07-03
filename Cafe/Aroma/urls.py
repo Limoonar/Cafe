@@ -28,6 +28,7 @@ urlpatterns = [
     path('thank-you/', views.render, {'template_name': 'thank_you.html'}, name='thank_you'),
     path('order_history/', views.order_history, name='order_history'),
     path('api/orders/', views.filter_orders, name='filter_orders'),
+    path('api/best-selling-products/', views.best_selling_products_api, name='best_selling_products_api'),
 
     # Other URLs for your views
 ]

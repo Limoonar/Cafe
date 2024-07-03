@@ -86,22 +86,24 @@
 
     <!-- Best Selling Products -->
     <div class="container mt-5 best-selling-section">
-        <h2>12 Best Selling Products</h2>
-        <div class="row">
-            {% for product in best_selling_products %}
-                <div class="col-md-3">
-                    <div class="card">
-                        <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ product.Name }}</h5>
-                            <p class="card-text">${{ product.Price }}</p>
-                            <a href="{{ product.get_absolute_url }}" class="btn btn-primary">View Product</a>
-                        </div>
-                    </div>
+    <h2>Top 2 Best Selling Products</h2>
+    <div id="best-selling-products" class="row">
+        {% for product in top_products %}
+        <div class="col-md-6">
+            <div class="card mb-4 shadow-sm">
+                <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.Name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.Name }}</h5>
+                    <p class="card-text">Price: ${{ product.Price }}</p>
+                    <p class="card-text">Vertical: {{ product.get_Vertical_display }}</p>
+                    <a href="{% url 'products' %}?vertical={{ product.Vertical }}" class="btn btn-primary">Go to Product</a>
+                    <!-- Add more details if needed -->
                 </div>
-            {% endfor %}
+            </div>
         </div>
+        {% endfor %}
     </div>
+</div>
 
     <!-- Footer with Social Media Icons -->
     <footer class="mt-5 py-4 text-center" style="background-color: #582f0e; color: #fff;">
@@ -131,6 +133,7 @@
             document.getElementById('vertical-menu').classList.toggle('show');
         });
     </script>
+
 
     <!-- Add your CSS for vertical menu -->
     <style>
