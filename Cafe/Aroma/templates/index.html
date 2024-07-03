@@ -83,25 +83,38 @@
     <!-- Best Selling Products -->
     <div class="container mt-5 best-selling-section">
     <h2>Top 12 Best Selling Products</h2>
-    <div id="best-selling-products" class="row">
-        {% for product in top_products %}
-        <div class="col-md-6">
-            <div class="card mb-4 shadow-sm">
-                <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.Name }}">
-                <div class="card-body">
-                    <h5 class="card-title">{{ product.Name }}</h5>
-                    <p class="card-text">Price: ${{ product.Price }}</p>
-                    <p class="card-text">Vertical: {{ product.get_Vertical_display }}</p>
-                    <div class="center-button">
-                        <button type="submit" class="btn btn-primary">Go to Product</button>
+        <div id="best-selling-products-slider" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                {% for product in top_products %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <div class="col-md-6 mx-auto">
+                        <div class="card mb-4 shadow-sm">
+                            <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.Name }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ product.Name }}</h5>
+                                <p class="card-text">Price: ${{ product.Price }}</p>
+                                <p class="card-text">Vertical: {{ product.get_Vertical_display }}</p>
+                                <div class="center-button">
+                                    <a href="{% url 'products' %}?vertical={{ product.Vertical }}" class="btn btn-primary">Go to Vertical</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
+            <a class="carousel-control-prev" href="#best-selling-products-slider" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#best-selling-products-slider" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
         </div>
-        {% endfor %}
-    </div>
 </div>
 
+    <!-- Footer with Social Media Icons -->
     <footer class="mt-5 py-4 text-center" style="background-color: #582f0e; color: #fff;">
         <div class="container">
 
@@ -116,12 +129,14 @@
         </div>
     </footer>
         
-
+    <!-- Add your JS links here -->
+    <!-- script src="{% static 'js/scripts.js' %}"></script>
+    <!-- Add jQuery and Bootstrap JS for better functionality -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-
+    <!-- Custom JavaScript to handle menu click -->
     <script>
         document.getElementById('menu-icon').addEventListener('click', function() {
             document.getElementById('vertical-menu').classList.toggle('show');
@@ -129,6 +144,7 @@
     </script>
 
 
+    <!-- Add your CSS for vertical menu -->
     <style>
         .best-selling-section {
             background-color: #D6CCC2; 
@@ -215,14 +231,14 @@
             margin: 20px auto;
         }
         .carousel-inner img {
-            border-radius: 20px;
+            border-radius: 20px; /* Apply rounded corners to the images inside the carousel */
         }        
         .navbar-custom {
-            background-color: #582f0e; 
+            background-color: #582f0e; /* Change this to your desired color */
         }   
         .navbar-custom .navbar-brand,
         .navbar-custom .nav-link {
-            color: rgb(255, 255, 255); 
+            color: rgb(255, 255, 255); /* Change the text color to contrast with the background */
         }
         .navbar-toggler-icon {
             background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
