@@ -5,11 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Page</title>
-    <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <!-- Chart.js CDN -->
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
@@ -201,7 +199,7 @@
                 },
                 plugins: {
                     legend: {
-                        display: true // Default display setting
+                        display: true 
                     }
                 }
             }
@@ -212,16 +210,15 @@
             fetch(`/api/orders?vertical=${selectedVertical}`)
                 .then(response => response.json())
                 .then(data => {
-                    console.log('Data from API:', data); // Log the data for debugging
+                    console.log('Data from API:', data); 
 
-                    // Extract labels and values from the data
                     const labels = [...new Set(data.map(order => order.created_at__date))];
                     const verticals = [...new Set(data.map(order => order.Products__Vertical))];
 
                     const datasets = verticals.map(vertical => {
                         return {
                             label: vertical,
-                            backgroundColor: getRandomColor(), // Function to get a random color for each vertical
+                            backgroundColor: getRandomColor(), 
                             borderColor: getRandomColor(),
                             data: labels.map(label => {
                                 const order = data.find(order => order.Products__Vertical === vertical && order.created_at__date === label);
@@ -231,19 +228,18 @@
                         };
                     });
 
-                    console.log('Labels:', labels); // Log the labels
-                    console.log('Datasets:', datasets); // Log the datasets
+                    console.log('Labels:', labels); 
+                    console.log('Datasets:', datasets); 
 
-                    // Update chart data
+                    
                     myChart.data.labels = labels;
                     myChart.data.datasets = datasets;
 
-                    // Adjust legend display based on selected vertical
                     myChart.options.plugins.legend.display = (selectedVertical === 'all');
                     myChart.update();
                 })
                 .catch(error => {
-                    console.error('Error fetching data:', error); // Log any errors
+                    console.error('Error fetching data:', error); 
                 });
         }
 
@@ -257,7 +253,7 @@
         }
 
         document.getElementById('verticalFilter').addEventListener('change', filterByVertical);
-        filterByVertical(); // Initial call to populate chart
+        filterByVertical(); 
 
         document.getElementById('menu-icon').addEventListener('click', function() {
             const verticalMenu = document.getElementById('vertical-menu');
