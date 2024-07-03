@@ -82,7 +82,7 @@
 
     <!-- Best Selling Products -->
     <div class="container mt-5 best-selling-section">
-    <h2>Top 2 Best Selling Products</h2>
+    <h2>Top 12 Best Selling Products</h2>
     <div id="best-selling-products" class="row">
         {% for product in top_products %}
         <div class="col-md-6">
@@ -92,7 +92,9 @@
                     <h5 class="card-title">{{ product.Name }}</h5>
                     <p class="card-text">Price: ${{ product.Price }}</p>
                     <p class="card-text">Vertical: {{ product.get_Vertical_display }}</p>
-                    <a href="{% url 'products' %}?vertical={{ product.Vertical }}" class="btn btn-primary">Go to Product</a>
+                    <div class="center-button">
+                        <button type="submit" class="btn btn-primary">Go to Product</button>
+                    </div>
                     <!-- Add more details if needed -->
                 </div>
             </div>
@@ -137,6 +139,37 @@
             background-color: #D6CCC2; 
             padding: 20px; 
             border-radius: 8px;
+        }
+        .best-selling-section {
+            background-color: #D6CCC2; 
+            padding: 20px; 
+            border-radius: 8px;
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .card-title {
+            color: #582f0e;
+            text-align: center;
+            font-weight: 650;
+        }
+        .card-text {
+            color: #582f0e;
+            text-align: center;
+        }
+        .center-button {
+            text-align: center;
+        }
+        .btn {
+            background-color: #99582a;
+            border-color: #582f0e;
+        }
+        .btn:hover {
+            color: #582f0e;
+            background-color: #ede0d4;
+            border-color: #582f0e;
         }
         .vertical-menu {
             display: none;

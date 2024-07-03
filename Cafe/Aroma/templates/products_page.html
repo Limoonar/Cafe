@@ -102,6 +102,19 @@
             background-color: #ede0d4;
             border-color: #582f0e;
         }
+        .carousel {
+            max-width: 1000px;
+            padding: 15px;
+            margin: 20px auto;
+        }
+        .carousel-inner img {
+            border-radius: 20px; /* Apply rounded corners to the images inside the carousel */
+        }
+        .alert-insufficient {
+            background-color: #f8d7da; /* Faded red background */
+            color: #721c24; /* Dark red text */
+            border-color: #f5c6cb; /* Border color to match the background */
+        }
     </style>
 </head>
 <body style="background-color: #F5EBE0;">
@@ -153,7 +166,7 @@
             <div class="messages mt-3">
                 {% for message in messages %}
                     {% if "insufficient ingredients" in message %}
-                        <div class="alert alert-insufficient alert-dismissible fade show" role="alert" style="background-color: #f8d7da; color: #721c24; border-color: #f5c6cb;">
+                        <div class="alert alert-insufficient alert-dismissible fade show" role="alert" style="background-color: #5f030b; color: #721c24; border-color: #f5c6cb;">
                             {{ message }}
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
@@ -229,76 +242,6 @@
             document.getElementById('vertical-menu').classList.toggle('show');
         });
     </script>  
-    
-    <!-- Add your CSS for vertical menu -->
-    <style>
-        .best-selling-section {
-            background-color: #D6CCC2;
-            padding: 20px;
-            border-radius: 8px;
-        }
-        .vertical-menu {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 200px;
-            height: 100%;
-            background-color: #D6CCC2;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-            padding-top: 60px;
-            z-index: 1050;
-        }
-        .vertical-menu a {
-            padding: 12px;
-            text-decoration: none;
-            font-size: 18px;
-            color: #000;
-            display: block;
-        }
-        .vertical-menu a:hover {
-            background-color: #ddd;
-        }
-        .vertical-menu a {
-            padding: 12px;
-            text-decoration: none;
-            font-size: 18px;
-            color: #000;
-            display: block;
-            border-bottom: 1px solid #ccc;
-            background-color: #F4F3EE;
-            margin: 5px;
-            border-radius: 10px;
-        }
-        .vertical-menu a:first-child {
-            font-weight: bold;
-            background-color: transparent;
-            border: none;
-            margin: 0;
-            border-radius: 10px;
-        }
-        .show {
-            display: block;
-        }
-        .carousel {
-            max-width: 1000px;
-            padding: 15px;
-            margin: 20px auto;
-        }
-        .carousel-inner img {
-            border-radius: 20px; /* Apply rounded corners to the images inside the carousel */
-        }
-        .navbar-custom {
-            background-color: #582f0e; /* Change this to your desired color */
-        }
-        .navbar-custom .navbar-brand,
-        .navbar-custom .nav-link {
-            color: rgb(255, 255, 255); /* Change the text color to contrast with the background */
-        }
-        .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
-        }
-    </style>
     <!-- Bootstrap Modal for Add to Cart Warning -->
     <div class="modal fade" id="add-to-cart-modal" tabindex="-1" role="dialog" aria-labelledby="add-to-cart-modal-title" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
