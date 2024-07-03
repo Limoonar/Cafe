@@ -47,7 +47,7 @@
             margin-left: 10px;
             font-size: 24px;
             font-weight: bold;
-            color: #F4F3EE;         
+            color: #F4F3EE;
         }
         header a:hover, .footer a:hover {
             text-decoration: underline;
@@ -137,7 +137,6 @@
         <a href="add_products" id="add-product-link">Add Product</a>
         <a href="{% url 'adminpage' %}"  id="dashboard-link">Dashboard</a>
     </div>
-
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-8">
@@ -147,11 +146,19 @@
                         <canvas id="salesChart"></canvas>
                     </div>
                     <div class="mt-4">
-                        <label for="timeInterval">Select Time Interval:</label>
-                        <select id="timeInterval" onchange="updateChart()">
-                            <option value="daily">Daily</option>
-                            <option value="weekly">Weekly</option>
-                            <option value="monthly">Monthly</option>
+                        <label for="verticalFilter">Select Vertical:</label>
+                        <select id="verticalFilter" onchange="filterByVertical()">
+                            <option value="all">All</option>
+                            <option value="Food">Food</option>
+                            <option value="Hot Drink">Hot Drink</option>
+                            <option value="Cold Drink">Cold Drink</option>
+                            <option value="Cake">Cake</option>
+
+
+
+                            {% for vertical in verticals %}
+                                <option value="{{ vertical }}">{{ vertical }}</option>
+                            {% endfor %}
                         </select>
                     </div>
                 </div>
@@ -169,57 +176,94 @@
         </div>
     </footer>
 
-    <script>
-        const salesData = {
-            labels: ['Product A', 'Product B', 'Product C', 'Product D', 'Product E'],
-            datasets: [{
-                label: 'Sales',
-                backgroundColor: '#DAB49D',
-                borderColor: '#DAB49D',
-                data: [65, 59, 80, 81, 56],
-                borderWidth: 1
-            }]
-        };
-
-        const chartOptions = {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
-        };
-
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
         const ctx = document.getElementById('salesChart').getContext('2d');
         const myChart = new Chart(ctx, {
             type: 'bar',
-            data: salesData,
-            options: chartOptions
+            data: {
+                labels: [], // Initial empty data
+                datasets: [{
+                    label: 'Number of Products',
+                    backgroundColor: '#DAB49D',
+                    borderColor: '#DAB49D',
+                    data: [],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true // Default display setting
+                    }
+                }
+            }
         });
 
-        function updateChart() {
-            const selectedInterval = document.getElementById('timeInterval').value;
-            const newData = [40, 55, 70, 65, 80];
-            myChart.data.datasets[0].data = newData;
-            myChart.update();
+        function filterByVertical() {
+            const selectedVertical = document.getElementById('verticalFilter').value;
+            fetch(`/api/orders?vertical=${selectedVertical}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Data from API:', data); // Log the data for debugging
+
+                    // Extract labels and values from the data
+                    const labels = [...new Set(data.map(order => order.created_at__date))];
+                    const verticals = [...new Set(data.map(order => order.Products__Vertical))];
+
+                    const datasets = verticals.map(vertical => {
+                        return {
+                            label: vertical,
+                            backgroundColor: getRandomColor(), // Function to get a random color for each vertical
+                            borderColor: getRandomColor(),
+                            data: labels.map(label => {
+                                const order = data.find(order => order.Products__Vertical === vertical && order.created_at__date === label);
+                                return order ? order.total_products : 0;
+                            }),
+                            borderWidth: 1
+                        };
+                    });
+
+                    console.log('Labels:', labels); // Log the labels
+                    console.log('Datasets:', datasets); // Log the datasets
+
+                    // Update chart data
+                    myChart.data.labels = labels;
+                    myChart.data.datasets = datasets;
+
+                    // Adjust legend display based on selected vertical
+                    myChart.options.plugins.legend.display = (selectedVertical === 'all');
+                    myChart.update();
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error); // Log any errors
+                });
         }
+
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        document.getElementById('verticalFilter').addEventListener('change', filterByVertical);
+        filterByVertical(); // Initial call to populate chart
 
         document.getElementById('menu-icon').addEventListener('click', function() {
             const verticalMenu = document.getElementById('vertical-menu');
             verticalMenu.style.display = verticalMenu.style.display === 'block' ? 'none' : 'block';
         });
-
-        document.getElementById('dashboard-link').addEventListener('click', function() {
-            document.getElementById('dashboard').style.display = 'block';
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('dashboard').style.display = 'block';
-        });
-    </script>
-    
+    });
+</script>
 </body>
 </html>

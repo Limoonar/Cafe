@@ -7,8 +7,9 @@ from django.contrib.auth.hashers import check_password
 import ghasedakpack
 from numpy.random import randint
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseForbidden, HttpResponse
+from django.http import HttpResponseForbidden, HttpResponse, JsonResponse
 from django.contrib import messages
+from django.db.models import Count
 
 sms = ghasedakpack.Ghasedak("a26658f51d8f300e354cf8d137bca49aab329de737a80c80f507fb883b2ffeba")
 
@@ -114,10 +115,7 @@ def otp_verify_view(request):
 
 # ADMIN PAGES
 #@login_required
-def adminpage_view(request):
-    if request.session.get('username') != 'admin':
-        return HttpResponseForbidden("You are not allowed to access this page.")
-    return render(request, 'adminpage.html')
+
 
 
 def add_products_view(request):
@@ -412,3 +410,36 @@ def order_history(request):
         'orders': orders
     }
     return render(request, 'order_history.html', context)
+
+
+def filter_orders(request):
+    vertical = request.GET.get('vertical', 'all')
+
+    if vertical == 'all':
+        orders = Orders.objects.values('Products__Vertical', 'created_at__date').annotate(
+            total_products=Count('Products'))
+    else:
+        orders = Orders.objects.filter(Products__Vertical=vertical).values('created_at__date').annotate(
+            total_products=Count('Products'))
+
+    data = list(orders)
+    return JsonResponse(data, safe=False)
+def adminpage_view(request):
+    if request.session.get('username') != 'admin':
+        return HttpResponseForbidden("You are not allowed to access this page.")
+    # Get all orders
+    orders = Orders.objects.all()
+
+    # Get the total number of products ordered each day
+    order_data = orders.values('created_at__date').annotate(total_products=Count('Products'))
+
+    # Get product verticals
+    distinct_verticals = list(Product.objects.values('Vertical').distinct())
+
+    context = {
+        'order_data': order_data,
+        'verticals': distinct_verticals,
+    }
+
+    return render(request, 'adminpage.html')
+

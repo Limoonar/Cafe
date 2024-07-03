@@ -27,6 +27,7 @@ urlpatterns = [
     path('finalize-purchase/', views.finalize_purchase, name='finalize_purchase'),
     path('thank-you/', views.render, {'template_name': 'thank_you.html'}, name='thank_you'),
     path('order_history/', views.order_history, name='order_history'),
+    path('api/orders/', views.filter_orders, name='filter_orders'),
 
     # Other URLs for your views
 ]

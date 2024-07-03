@@ -70,6 +70,8 @@ class Orders(models.Model):
     Products = models.ManyToManyField(Product, related_name= 'Orders')
     Purchase_amount = models.IntegerField(max_length=10)
     Type = models.IntegerField(choices=CHOICES)
+    created_at = models.DateTimeField(default=timezone.now)
+
 
     
     def save(self, *args, **kwargs):
